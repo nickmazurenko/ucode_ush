@@ -55,6 +55,7 @@ command_func get_func_with_name(t_commands_dictionary_node* dictionary, char* co
 t_commands_dictionary_node* create_commands_dictionary_list() {
     t_commands_dictionary_node* head = NULL;
     push_commands_dictionary(&head, "export", export);
-
+    push_commands_dictionary(&head, "pwd", pwd);
+    
     return head;
 }

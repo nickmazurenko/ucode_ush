@@ -6,5 +6,6 @@ int main() {
     size_t size = 0;
     getline(&buffer, &size, stdin);
     mx_printstr(buffer);
+    interpret(buffer);
     
 }

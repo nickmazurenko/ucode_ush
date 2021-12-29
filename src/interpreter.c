@@ -24,6 +24,7 @@ char** get_tokens(char* line) {
 void execute_command(t_commands_dictionary_node* commands_dict, t_expression* expression) {
 
     command_func func = get_func_with_name(commands_dict, expression->command);
+
     if (func) func(expression);
     else {
         // check in system
@@ -52,7 +53,6 @@ void interpret(char *str) {
     }
 
     t_expression_node* current_expression = expressions;
-
     while (current_expression)
     {
         execute_command(commands_dictionary, current_expression->expression);
