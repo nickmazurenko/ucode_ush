@@ -21,4 +21,11 @@
 #include <libgen.h>
 #include <wordexp.h>
 
+#include "pwd.h"
+#include "expression.h"
+#include "export.h"
+
+int pwd(t_expression* expression);
+int export(t_expression* expression);
+
 #endif
