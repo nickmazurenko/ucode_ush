@@ -1,4 +1,4 @@
-#include "libmx.h"
+#include "ush.h"
 
 int main() {
     mx_printstr("HELLO USH!!!");
