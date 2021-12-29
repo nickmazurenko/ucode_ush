@@ -79,6 +79,7 @@ int clear_pwd(t_pwd_flag *flag) {
     }
 
     free(pwd_string);
+    free(flag);
     return 0;
 }
 

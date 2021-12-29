@@ -59,4 +59,8 @@ void interpret(char *str) {
         current_expression = current_expression->next;
     }
 
+    mx_del_strarr(&lines);
+    free_commands_dictionary_list(&commands_dictionary);
+    free_epression_list(&expressions);
+
 }

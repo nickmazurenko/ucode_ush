@@ -5,7 +5,7 @@ t_expression* create_expression(char* command, char** argv, int argc) {
     expression->command = mx_strdup(command);
 
     expression->argc = argc;
-    expression->argv = (char**)malloc(sizeof(char*));
+    expression->argv = (char**)malloc(sizeof(char*) * argc);
 
     for (int i = 0; i < argc; i++) {
         if (argv[i])
