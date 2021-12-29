@@ -24,6 +24,7 @@
 #include "pwd.h"
 #include "expression.h"
 #include "export.h"
+#include "interpreter.h"
 
 int pwd(t_expression* expression);
 int export(t_expression* expression);
