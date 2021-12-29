@@ -1,7 +1,7 @@
 #pragma once
 #include "ush.h"
 #include "expression.h"
-#include "utils.h"
+#include "commands_dictionary.h"
 
 #define BUILD_IN_COOMMANDS_NUMBER 9
 

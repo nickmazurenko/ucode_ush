@@ -1,5 +1,7 @@
 #pragma once
 
+#include "libmx.h"
+
 typedef struct s_expression {
     char* command;
     int argc;

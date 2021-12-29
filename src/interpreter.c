@@ -33,11 +33,13 @@ void execute_command(t_commands_dictionary_node* commands_dict, t_expression* ex
 }
 
 void interpret(char *str) {
+
+    t_commands_dictionary_node* commands_dictionary = create_commands_dictionary_list();
+
     // TODO: emty string?
     char** lines = get_lines(str);
 
     t_expression_node* expressions = NULL;
-
 
     for (int line_index = 0; lines[line_index] != NULL; line_index++) {
         char** tokens = get_tokens(lines[line_index]);
@@ -53,7 +55,7 @@ void interpret(char *str) {
 
     while (current_expression)
     {
-        execute_command(current_expression);
+        execute_command(commands_dictionary, current_expression->expression);
         current_expression = current_expression->next;
     }
 

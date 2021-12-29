@@ -41,7 +41,7 @@ void free_commands_dictionary_list(t_commands_dictionary_node** head) {
 command_func get_func_with_name(t_commands_dictionary_node* dictionary, char* command_str) {
     while (dictionary != NULL)
     {
-        if (mx_strcmp(dictionary->command_str, command_str)) {
+        if (mx_strcmp(dictionary->command_str, command_str) == 0) {
             break;
         } else {
             dictionary = dictionary->next;

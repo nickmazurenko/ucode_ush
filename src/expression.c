@@ -8,7 +8,10 @@ t_expression* create_expression(char* command, char** argv, int argc) {
     expression->argv = (char**)malloc(sizeof(char*));
 
     for (int i = 0; i < argc; i++) {
-        expression->argv[i] = mx_strdup(argv[i]);
+        if (argv[i])
+            expression->argv[i] = mx_strdup(argv[i]);
+        else 
+            expression->argv[i] = NULL;
     }
 
     return expression;

@@ -1,5 +1,6 @@
 #include "export.h"
 
 int clear_export() {
-    printf("export\n");
+    printf("export_c\n");
+    return 0;
 }

@@ -17,3 +17,4 @@ t_commands_dictionary_node* create_commands_dictionary_node(char* command, int (
 t_commands_dictionary_node* push_commands_dictionary(t_commands_dictionary_node** head, char* command, int(*command_func)(t_expression*));
 void free_commands_dictionary_list(t_commands_dictionary_node** head);
 command_func get_func_with_name(t_commands_dictionary_node* dictionary, char* command_str);
+t_commands_dictionary_node* create_commands_dictionary_list();
