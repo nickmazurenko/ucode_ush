@@ -20,7 +20,6 @@
 #include <spawn.h>
 #include <libgen.h>
 #include <wordexp.h>
-
 #include "pwd.h"
 #include "expression.h"
 #include "export.h"

@@ -10,8 +10,16 @@ t_pwd_flag *create_pwd_flag() {
     return flag;
 }
 
+void bad_option_error(char *option) {
+   char *error = mx_strdup("pwd: bad option: ");
+   char *wrong_option = mx_strndup(option, 2);
+   error = mx_strjoin(error, wrong_option);
+   mx_printerr(error);
+   free(error);
+   free(wrong_option);
+}
 
-void find_pwd_flags(t_pwd_flag *flag, char **argv, int argc) {
+int find_pwd_flags(t_pwd_flag *flag, char **argv, int argc) {
     if(argv[0] == NULL) {
         flag->no_flag = true;
         flag->wrong_flag = false;
@@ -21,17 +29,25 @@ void find_pwd_flags(t_pwd_flag *flag, char **argv, int argc) {
                 flag->l_flag = true;
                 flag->wrong_flag = false;
             }
-            if(!mx_strcmp(argv[argv_index], "-P")) {
+            else if(!mx_strcmp(argv[argv_index], "-P")) {
                 flag->p_flag = true;
                 flag->wrong_flag = false;
             }
-            if(!mx_strcmp(argv[argv_index], "-LP") || !mx_strcmp(argv[argv_index], "-PL")) {
+            else if(!mx_strcmp(argv[argv_index], "-LP") || !mx_strcmp(argv[argv_index], "-PL")) {
                 flag->p_flag = true;
                 flag->l_flag = true;
                 flag->wrong_flag = false;
+            } 
+            else {
+                flag->wrong_flag = true;
+            }
+            if(flag->wrong_flag) {
+                bad_option_error(argv[argv_index]);
+                return 1;
             }
         }
     }
+    return 0;
 }
 
 char *get_pwd() {
@@ -63,7 +79,7 @@ char *get_symbolic_pwd() {
 
 int clear_pwd(t_pwd_flag *flag) {
     char *pwd_string = NULL;
-    if(flag->l_flag || flag->no_flag) /*&& no flags*/ {
+    if(flag->l_flag || flag->no_flag) {
         pwd_string = get_pwd();
     }
 

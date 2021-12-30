@@ -2,6 +2,7 @@
 
 #include "expression.h"
 #include "libmx.h"
+#include <string.h>
 
 
 typedef struct s_pwd_flag {
@@ -13,7 +14,7 @@ typedef struct s_pwd_flag {
 
 t_pwd_flag *create_pwd_flag();
 
-void find_pwd_flags(t_pwd_flag *flag, char **argv, int argc);
+int find_pwd_flags(t_pwd_flag *flag, char **argv, int argc);
 
 
 

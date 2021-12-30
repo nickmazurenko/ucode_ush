@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPRESSION_H
+#define EXPRESSION_H
 
 #include "libmx.h"
 
@@ -21,3 +22,5 @@ typedef struct s_expression_node {
 t_expression_node* create_expression_node(char* command, char** argv, int argc);
 t_expression_node* push_expression_list(t_expression_node** head, char* command, char** argv, int argc);
 void free_epression_list(t_expression_node** head);
+
+#endif
