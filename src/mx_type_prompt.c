@@ -1,6 +1,6 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
-void mx_type_prompt(void) {
+void mx_print_prompt(void) {
     /*static bool prompt_first_time = true;
     if (prompt_first_time) {
         const char *CLEAR_SCREEN_ANSI = " \x1B[1;1H\x1B[2J";

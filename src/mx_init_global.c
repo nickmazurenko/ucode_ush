@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 void mx_init_global(void) {
     t_global.PWD = mx_strnew(PATH_MAX);

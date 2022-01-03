@@ -17,4 +17,3 @@ int mx_atoi(char *str) {
 
     return sign * result;
 }
-

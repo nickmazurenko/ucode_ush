@@ -1,12 +1,16 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 void mx_read_command(char **line) {
-    *line = mx_strnew(PATH_MAX);
+    *line = mx_strnew(0);
+    int size = 0;
 
-    //read one line
-    int read = mx_input(line, PATH_MAX);
-    
+    getline(line, &size, stdin);
+    char* trimmed_line = mx_strtrim(*line);
+
+    free(*line);
+    *line = trimmed_line;
+
     mx_replace_tilda(line);
     
-    if (read == 0) return;
+    if (size == 0) return;
 }
