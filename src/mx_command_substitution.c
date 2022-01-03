@@ -1,13 +1,14 @@
-#include "../inc/ush.h"
+#include "ush.h"
+#include "utils.h"
 
 static char *get_exe_command(char *line);
 
-int mx_command_substitution(char **str) {
-    char *data = *str;
-
+int handle_back_quotes(char* data, char** str) {
     char *ptr = mx_strchr(data, '`');
+
     if (ptr) {
-        if (mx_count_substr(ptr, "`") % 2 != 0) {
+        int c = mx_count_substr_new(ptr, "`");
+        if (mx_count_substr_new(ptr, "`") % 2 != 0) {
             //mx_printerr("ush: unmatched: `\n");
             return 0;
         }
@@ -61,7 +62,7 @@ int mx_command_substitution(char **str) {
                 }
                 strrep[mx_strlen(strrep) - 1] = '\0';
                 pclose(fp);
-                
+
                 *str = mx_strrep(*str, var2, strrep);
                 free(strrep);
                 free(command);
@@ -74,8 +75,11 @@ int mx_command_substitution(char **str) {
             ptr = mx_strchr(data, '`');
         }
     }
-    
-    ptr = strchr(data, '$');
+    return 0;
+}
+
+int handle_dollars(char* data, char** str) {
+    char* ptr = strchr(data, '$');
     if (!ptr)
         return 0;
 
@@ -118,12 +122,12 @@ int mx_command_substitution(char **str) {
                 ptr = strchr(*str, '$');
                 continue;
             }
-            
+
             char *env_val = getenv(str_var);
             char *env = NULL;
             if (env_val == NULL)
                 env = mx_strdup("\0");
-            else 
+            else
                 env = mx_strdup(env_val);
 
             *str = rep_substr(*str, str_to_replace, env);
@@ -182,7 +186,7 @@ int mx_command_substitution(char **str) {
             char *env = NULL;
             if (env_val == NULL)
                 env = mx_strdup("\0");
-            else 
+            else
                 env = mx_strdup(env_val);
 
             *str = rep_substr(*str, str_to_replace, env);
@@ -199,7 +203,7 @@ int mx_command_substitution(char **str) {
     ptr = strrchr(*str, '$');
     if (!ptr)
         return 0;
-    
+
     // Loop for other simple substitutions like $(COMMANDS)
     while (ptr != NULL) {
         if (*(ptr + 1) != '(') {
@@ -230,7 +234,7 @@ int mx_command_substitution(char **str) {
                 str_to_replace[i + 1] = *tmp_ptr;
         }
 
-       
+
         char *income_command = mx_strnew(mx_strlen(str_var));
         for (int j = 0; str_var[j] != ' ' && str_var[j] != '\0' && str_var[j] != ')'; j++) {
             char c = str_var[j];
@@ -260,7 +264,7 @@ int mx_command_substitution(char **str) {
         }
         strrep[mx_strlen(strrep) - 1] = '\0';
         pclose(fp);
-        
+
         *str = rep_substr(*str, str_to_replace, strrep);
         free(strrep);
         free(command);
@@ -270,6 +274,20 @@ int mx_command_substitution(char **str) {
         free(str_var);
         ptr = strrchr(*str, '$');
     }
+    return 0;
+}
+
+int mx_command_substitution(char **str) {
+    char *data = *str;
+
+    int result = handle_back_quotes(data, str);
+
+    if (result) return result;
+
+    result = handle_dollars(data, str);
+
+    if (result) return result;
+
     return 0;
 }
 
