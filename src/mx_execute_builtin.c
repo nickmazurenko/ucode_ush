@@ -54,10 +54,10 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
 
     // CD
     else if (!mx_strcmp("cd", command)) {
-        t_flags_cd cd_flags;
-        mx_cd_flags_init(&cd_flags);
-        if (!mx_cd_flags_set(&cd_flags, params))
-            t_global.exit_status = mx_builtin_cd(params, &cd_flags);
+        t_cd_flags *cd_flag = create_cd_flags();
+
+        if (!find_cd_flags(&cd_flag, params))
+            t_global.exit_status = clear_cd(params, &cd_flag);
         else
             t_global.exit_status = 1;
         return 0;

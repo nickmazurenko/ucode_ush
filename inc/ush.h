@@ -72,15 +72,15 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
 
 // CD block
 //===============================================================
-typedef struct s_flags_cd
+typedef struct s_cd_flags
 {
-    bool using_s;
-    bool using_P;
-}              t_flags_cd;
+    bool is_s_flag;
+    bool is_p_flag;
+}              t_cd_flags;
 
-int mx_builtin_cd(char **params, t_flags_cd *flags);
-void mx_cd_flags_init(t_flags_cd *data);
-int mx_cd_flags_set(t_flags_cd *data, char **flags);
+int mx_builtin_cd(char **params, t_cd_flags *flags);
+void mx_cd_flags_init(t_cd_flags *data);
+int mx_cd_flags_set(t_cd_flags *data, char **flags);
 //===============================================================
 
 

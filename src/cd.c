@@ -1,4 +1,45 @@
-#include "../inc/ush.h"
+#include "ush.h"
+
+t_cd_flags *create_cd_flags(void) {
+    t_cd_flags *flag = (t_cd_flags *)malloc(sizeof(t_cd_flags));
+
+    flag->is_s_flag = false;
+    flag->is_p_flag = false;
+
+    return flag;
+}
+
+//TODO send to file with errors
+void print_cd_error(char wrong_flag) {
+    mx_printerr("ush: cd: -");
+    mx_printerr(&wrong_flag);
+    mx_printerr(": invalid option\n");
+    mx_printerr("cd: usage: cd [-sP]\n");
+}
+
+int find_cd_flags(t_cd_flags *data, char **flags) {
+    if (flags[1] != NULL) {
+        int flags_len = mx_strlen(flags[1]);
+        if (flags[1][0] == '-') {
+            for (int i = 1; i < flags_len; i++) {
+
+                switch (flags[1][i]) {
+                    case 'P':
+                        data->is_p_flag = true;
+                        break;
+                    case 's':
+                        data->is_s_flag = true;
+                        break;
+                    default:
+                        print_cd_error(flags[1][i]);
+                        return 1;
+                        break;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 static void go_to_parent();
 static void go_to_dir(char *dir);
@@ -8,16 +49,19 @@ char *mx_rep_tilda(char *str) {
     int index = mx_get_char_index(str, '~');
     if (index == -1)
         return NULL;
+
     char *res = malloc(PATH_MAX);
+
     mx_memset(res, 0, PATH_MAX);
     mx_memcpy(res, str, index);
     mx_memcpy(res + index, t_global.HOME, mx_strlen(t_global.HOME));
     mx_memcpy(res + index + mx_strlen(t_global.HOME), 
         str + index + 1, PATH_MAX - index - 1 - mx_strlen(t_global.HOME));
+
     return res;
 }
 
-int mx_builtin_cd(char **params, t_flags_cd *flags) {
+int clear_cd(char **params, t_cd_flags *flags) {
     mx_apply_escapes(&params);
     int argc = 0;
     for (; params[argc] != NULL; argc++);
@@ -134,7 +178,7 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
     if (tilda_path == NULL)
         tilda_path = mx_strdup(path);
 
-    if (flags->using_s) {
+    if (flags->is_s_flag) {
         if (check_lnk_path(tilda_path)) {
             mx_printerr("cd: not a directory: ");
             mx_printerr(tilda_path);
@@ -150,7 +194,7 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
         return 0;
     }
 
-    if (path != NULL && flags->using_P) {
+    if (path != NULL && flags->is_p_flag) {
         char *res = NULL;
         res = realpath(tilda_path, real_buf);
         free(tilda_path);
