@@ -1,26 +1,45 @@
-.PHONY: all ush uninstall reinstall
+NAME = ush
+#CFLAGS = -std=c11 $(addprefix -W, all extra error pedantic) -g
+CFLAGS = -std=c11 -g
+COMP = clang
 
-SRCS := $(wildcard src/*.c)
-OBJS := $(wildcard obj/*.o)
+SRCDIR = src
+INCDIR = inc
+OBJDIR = obj
 
-WFLGS := #$(addprefix -W, all extra error pedantic)
+LMXDIR = libmx
+LMXA := $(LMXDIR)/libmx.a
+LMXINC := $(LMXDIR)/inc
 
-all: ush
 
-ush:
-	@$(MAKE) -sC libmx/
-	@clang -c $(WFLGS) $(SRCS)
-	@mkdir obj
-	@mv *.o obj
-	@clang -std=c11 obj/*.o libmx/libmx.a -I ./inc/ush.h
-	@mv a.out $@
+INCS = $(wildcard $(INCDIR)/*.h)
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:%.c=%.o)))
+
+all: install
+
+install: $(LMXA) $(NAME)
+
+$(NAME): $(OBJS)
+	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
+	@clang $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC)
+
+$(OBJS): | $(OBJDIR)
+
+$(OBJDIR):
+		@mkdir -p $@
+
+$(LMXA):
+		@make -sC $(LMXDIR)
 
 clean:
-	@rm -rdf obj/
-	@$(MAKE) -sC libmx/ clean
+	@rm -rf $(OBJDIR)
 
 uninstall: clean
-	@rm -rf ush
-	@$(MAKE) -sC libmx/ uninstall
+	@make -sC $(LMXDIR) $@
+	@rm -rf $(OBJDIR)
+	@rm -rf $(NAME)
 
-reinstall: uninstall ush
+reinstall: uninstall install
