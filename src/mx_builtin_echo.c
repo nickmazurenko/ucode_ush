@@ -298,8 +298,9 @@ static void apply_escapes(char **str) {
     }
 }
 
+// TODO: change mx_delete_extra_spaces on mx_del_extra_spaces
 static void del_extra_spaces(char **str) {
     if (strchr(*str, '"') || strchr(*str, '\''))
         return;
-    *str = mx_delete_extra_spaces(*str);
+    *str = mx_del_extra_spaces(*str);
 }

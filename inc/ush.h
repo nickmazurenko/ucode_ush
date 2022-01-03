@@ -27,7 +27,7 @@
 #include <curses.h>
 #include <termios.h>
 
-#include "../libmx/inc/libmx.h"
+#include "libmx.h"
 
 #define TILDA "~\0"
 
@@ -141,3 +141,6 @@ int mx_echo_flags_set(t_flags_echo *data, char **flags);
 
 int mx_builtin_unset(const char *name);
 int mx_unset_check_param(char **data);
+
+//===============================================================
+int mx_atoi(char *);
