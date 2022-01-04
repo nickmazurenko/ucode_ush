@@ -39,13 +39,13 @@ void mx_create_process(char *command, char **parameters, char *line) {
         jobs_push_back(&jobs, &new_process);
         int child_status = 0;
         waitpid(child_pid, &child_status, WUNTRACED);
-        t_global.exit_status = WEXITSTATUS(child_status);
+        t_dirs_to_work.exit_status = WEXITSTATUS(child_status);
         if (!WIFSTOPPED(child_status))
             jobs_remove(&jobs, child_pid);
         else
-            t_global.exit_status = 147;
+            t_dirs_to_work.exit_status = 147;
         
         if (WIFSIGNALED(child_status))
-            t_global.exit_status = 130;
+            t_dirs_to_work.exit_status = 130;
     }
 }

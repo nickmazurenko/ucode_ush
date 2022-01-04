@@ -1,12 +1,11 @@
 #include "loop.h"
 
 int main(void) {
-
-    mx_init_global();
+    initialise_dirs();
 
     loop();
 
-    mx_free_global();
+    free_dirs();
     return 0;
 }
 

@@ -114,7 +114,7 @@ int handle_dollars(char* data, char** str) {
             }
 
             if (str_var[0] == '?') {
-                char *status = mx_itoa(t_global.exit_status);
+                char *status = mx_itoa(t_dirs_to_work.exit_status);
                 *str = rep_substr(*str, str_to_replace, status);
                 free(status);
                 free(str_to_replace);
@@ -174,7 +174,7 @@ int handle_dollars(char* data, char** str) {
                     mx_printerr("ush: bad substitution\n");
                     free(str_to_replace);
                     free(str_var);
-                    t_global.exit_status = 1;
+                    t_dirs_to_work.exit_status = 1;
                     return -1;
                 }
                 tmp_ptr++;

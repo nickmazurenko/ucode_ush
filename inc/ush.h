@@ -33,8 +33,8 @@
 
 
 extern char **environ;
-void mx_init_global(void);
-void mx_free_global(void);
+void initialise_dirs(void);
+void free_dirs(void);
 char *mx_strrep(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
 int mx_command_substitution(char **str);
@@ -42,14 +42,14 @@ void mx_apply_escapes(char ***arr);
 void mx_create_process(char *command, char **parameters, char *cmd);
 char *rep_substr(char *str, char *substr, char *new_str);
 
-struct s_global
+struct s_dirs_to_work
 {
     char *PWD;
     char *OLDPWD;
     char *HOME;
     int exit_status;
     char *PATH;
-}      t_global;
+}      t_dirs_to_work;
 
 typedef struct s_jobs
 {

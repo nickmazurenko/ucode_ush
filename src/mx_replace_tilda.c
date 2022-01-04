@@ -6,9 +6,9 @@ void mx_replace_tilda(char **str) {
     char *tmp = NULL;
     int index = -1;
 
-    int pwd_len = mx_strlen(t_global.PWD);
-    int oldpwd_len = mx_strlen(t_global.OLDPWD);
-    int home_len = mx_strlen(t_global.HOME);
+    int pwd_len = mx_strlen(t_dirs_to_work.PWD);
+    int oldpwd_len = mx_strlen(t_dirs_to_work.OLDPWD);
+    int home_len = mx_strlen(t_dirs_to_work.HOME);
 
     // Loop for '~+/' which equals to PWD
     while (true) {
@@ -18,7 +18,7 @@ void mx_replace_tilda(char **str) {
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);
-        mx_memcpy(tmp + index, t_global.PWD, pwd_len);
+        mx_memcpy(tmp + index, t_dirs_to_work.PWD, pwd_len);
         if (tmp[index + pwd_len - 1] == '/' && (*str)[index + 2] == '/') {
             tmp[index + pwd_len - 1] = '\0';
             pwd_len--;
@@ -39,7 +39,7 @@ void mx_replace_tilda(char **str) {
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);
-        mx_memcpy(tmp + index, t_global.OLDPWD, oldpwd_len);
+        mx_memcpy(tmp + index, t_dirs_to_work.OLDPWD, oldpwd_len);
         mx_memcpy(tmp + index + oldpwd_len, 
             *str + index + 2, PATH_MAX - index - 2 - oldpwd_len);
         free(*str);
@@ -56,7 +56,7 @@ void mx_replace_tilda(char **str) {
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);
-        mx_memcpy(tmp + index, t_global.HOME, home_len);
+        mx_memcpy(tmp + index, t_dirs_to_work.HOME, home_len);
         mx_memcpy(tmp + index + home_len, 
             *str + index + 1, PATH_MAX - index - 1 - home_len);
         free(*str);
@@ -74,7 +74,7 @@ void mx_replace_tilda(char **str) {
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);
-        mx_memcpy(tmp + index, t_global.HOME, home_len);
+        mx_memcpy(tmp + index, t_dirs_to_work.HOME, home_len);
 
         move_to_parent(&tmp);
 
@@ -96,7 +96,7 @@ void mx_replace_tilda(char **str) {
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);
-        mx_memcpy(tmp + index, t_global.HOME, home_len);
+        mx_memcpy(tmp + index, t_dirs_to_work.HOME, home_len);
         mx_memcpy(tmp + index + home_len, 
             *str + index + 1, PATH_MAX - index - 1 - home_len);
         free(*str);

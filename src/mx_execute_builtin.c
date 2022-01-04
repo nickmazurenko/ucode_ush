@@ -21,7 +21,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
             for (int i = 1; params[i] != NULL; i++) {
                 if (mx_builtin_unset(params[i]) < 0) {
                     perror("ush: unset");
-                    t_global.exit_status = 1;
+                    t_dirs_to_work.exit_status = 1;
                     continue;
                 }
             }
@@ -35,9 +35,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         t_flags_env env_flags;
         mx_env_flags_init(&env_flags);
         if (!mx_env_flags_set(&env_flags, params))
-            t_global.exit_status = mx_builtin_env(&env_flags, params);
+            t_dirs_to_work.exit_status = mx_builtin_env(&env_flags, params);
         else
-            t_global.exit_status = 1;
+            t_dirs_to_work.exit_status = 1;
         return 0;
     }
 
@@ -46,9 +46,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         t_flags_pwd pwd_flags;
         mx_pwd_flags_init(&pwd_flags);
         if (!mx_pwd_flags_set(&pwd_flags, params))
-            t_global.exit_status = mx_builtin_pwd(&pwd_flags);
+            t_dirs_to_work.exit_status = mx_builtin_pwd(&pwd_flags);
         else
-            t_global.exit_status = 1;
+            t_dirs_to_work.exit_status = 1;
         return 0;
     }
 
@@ -57,9 +57,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         t_cd_flags *cd_flag = create_cd_flags();
 
         if (!find_cd_flags(&cd_flag, params))
-            t_global.exit_status = clear_cd(params, &cd_flag);
+            t_dirs_to_work.exit_status = clear_cd(params, &cd_flag);
         else
-            t_global.exit_status = 1;
+            t_dirs_to_work.exit_status = 1;
         return 0;
     }
     
@@ -68,9 +68,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         t_flags_which which_flags;
         mx_which_flags_init(&which_flags);
         if (!mx_which_flags_set(&which_flags, params))
-            t_global.exit_status = mx_builtin_which(&which_flags, params);
+            t_dirs_to_work.exit_status = mx_builtin_which(&which_flags, params);
         else
-            t_global.exit_status = 1;
+            t_dirs_to_work.exit_status = 1;
         return 0;
     }
 
@@ -79,9 +79,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         t_flags_echo echo_flags;
         mx_echo_flags_init(&echo_flags);
         if (!mx_echo_flags_set(&echo_flags, params))
-            t_global.exit_status = mx_builtin_echo(&echo_flags, &(*commands_arr)[i]);
+            t_dirs_to_work.exit_status = mx_builtin_echo(&echo_flags, &(*commands_arr)[i]);
         else
-            t_global.exit_status = 1;
+            t_dirs_to_work.exit_status = 1;
         return 0;
     }
 
@@ -96,21 +96,21 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         
         if (node == NULL) {
             mx_printerr("ush: fg: no such job\n");
-            t_global.exit_status = 1;
+            t_dirs_to_work.exit_status = 1;
             return 0;
         }
 
         kill(node->pid, SIGCONT);
         int child_status = 0;
         waitpid(node->pid, &child_status, WUNTRACED);
-        t_global.exit_status = WEXITSTATUS(child_status);
+        t_dirs_to_work.exit_status = WEXITSTATUS(child_status);
         if (!WIFSTOPPED(child_status))
             jobs_remove(&jobs, node->pid);
             
         if (WIFSIGNALED(child_status))
-            t_global.exit_status = 130;
+            t_dirs_to_work.exit_status = 130;
         else
-            t_global.exit_status = 0;
+            t_dirs_to_work.exit_status = 0;
         return 0;
     }
 
@@ -120,7 +120,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
             t_flags_env env_flags;
             mx_env_flags_init(&env_flags);
             mx_builtin_env(&env_flags, params);
-            t_global.exit_status = 0;
+            t_dirs_to_work.exit_status = 0;
             return 0;
         }
 
@@ -133,7 +133,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
             setenv(arr[0], arr[1], 1);
             mx_del_strarr(&arr);
         }
-        t_global.exit_status = 0;
+        t_dirs_to_work.exit_status = 0;
         return 0;
     }
 

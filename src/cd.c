@@ -17,7 +17,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
     char pwd[PATH_MAX];
 
     dest_idx = count_dest(dest);
-    mx_memcpy(pwd, t_global.PWD, PATH_MAX);
+    mx_memcpy(pwd, t_dirs_to_work.PWD, PATH_MAX);
 
     if (dest_idx > 1) {
         if (dest[1][0] == '-' && mx_strlen(dest[1]) > 1)
@@ -29,18 +29,18 @@ int clear_cd(char **dest, t_cd_flags *flags) {
     switch (dest_idx) {
 
     case 1:
-        if (t_global.HOME[0] != '\0') {
+        if (t_dirs_to_work.HOME[0] != '\0') {
 
-            chdir(t_global.HOME);
+            chdir(t_dirs_to_work.HOME);
 
-            if (mx_strcmp(t_global.OLDPWD, t_global.PWD)) {
+            if (mx_strcmp(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD)) {
 
-                mx_memcpy(t_global.OLDPWD, t_global.PWD, PATH_MAX);
-                setenv("OLDPWD", t_global.OLDPWD, 1);
+                mx_memcpy(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD, PATH_MAX);
+                setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
             }
 
-            mx_memcpy(t_global.PWD, t_global.HOME, PATH_MAX);
-            setenv("PWD", t_global.PWD, 1);
+            mx_memcpy(t_dirs_to_work.PWD, t_dirs_to_work.HOME, PATH_MAX);
+            setenv("PWD", t_dirs_to_work.PWD, 1);
         }
 
         free(full_path);
@@ -49,33 +49,33 @@ int clear_cd(char **dest, t_cd_flags *flags) {
 
     case 2:
         if (dest[1][0] == '-' && mx_strlen(dest[1]) > 1) {
-            if (t_global.HOME[0] != '\0') {
+            if (t_dirs_to_work.HOME[0] != '\0') {
 
-                chdir(t_global.HOME);
+                chdir(t_dirs_to_work.HOME);
 
-                if (mx_strcmp(t_global.OLDPWD, t_global.PWD)) {
-                    mx_memcpy(t_global.OLDPWD, t_global.PWD, PATH_MAX);
-                    setenv("OLDPWD", t_global.OLDPWD, 1);
+                if (mx_strcmp(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD)) {
+                    mx_memcpy(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD, PATH_MAX);
+                    setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
                 }
 
-                mx_memcpy(t_global.PWD, t_global.HOME, PATH_MAX);
-                setenv("PWD", t_global.PWD, 1);
+                mx_memcpy(t_dirs_to_work.PWD, t_dirs_to_work.HOME, PATH_MAX);
+                setenv("PWD", t_dirs_to_work.PWD, 1);
             }
 
             free(full_path);
             return 0;
         } else  if (dest[1][0] == '-') {
 
-            if (t_global.OLDPWD[0] != '\0') {
-                chdir(t_global.OLDPWD);
-                setenv("OLDPWD", t_global.PWD, 1);
-                setenv("PWD", t_global.OLDPWD, 1);
+            if (t_dirs_to_work.OLDPWD[0] != '\0') {
+                chdir(t_dirs_to_work.OLDPWD);
+                setenv("OLDPWD", t_dirs_to_work.PWD, 1);
+                setenv("PWD", t_dirs_to_work.OLDPWD, 1);
 
-                mx_memcpy(t_global.PWD, t_global.OLDPWD, PATH_MAX);
-                mx_memset(t_global.OLDPWD, 0, PATH_MAX);
-                mx_memcpy(t_global.OLDPWD, getenv("OLDPWD"), mx_strlen(getenv("OLDPWD")));
+                mx_memcpy(t_dirs_to_work.PWD, t_dirs_to_work.OLDPWD, PATH_MAX);
+                mx_memset(t_dirs_to_work.OLDPWD, 0, PATH_MAX);
+                mx_memcpy(t_dirs_to_work.OLDPWD, getenv("OLDPWD"), mx_strlen(getenv("OLDPWD")));
 
-                char *test = mx_strrep(t_global.PWD, t_global.HOME, TILDA);
+                char *test = mx_strrep(t_dirs_to_work.PWD, t_dirs_to_work.HOME, TILDA);
 
                 if (test != NULL)
                     free(test);
@@ -89,7 +89,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
         if (dest[1][0] == '-')
             break;
         else {
-            char *tmp = mx_strrep(t_global.PWD, dest[1], dest[2]);
+            char *tmp = mx_strrep(t_dirs_to_work.PWD, dest[1], dest[2]);
             if (tmp != NULL) {
                 free(full_path);
                 full_path = tmp;
@@ -109,7 +109,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
             free(full_path);
             return 1;
         } else {
-            char *tmp = mx_strrep(t_global.PWD, dest[2], dest[3]);
+            char *tmp = mx_strrep(t_dirs_to_work.PWD, dest[2], dest[3]);
             if (tmp != NULL) {
                 free(full_path);
                 full_path = tmp;
@@ -123,7 +123,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
         break;
     }
 
-    char *tilda_path = rep_substr(full_path, "~", t_global.HOME);//mx_rep_tilda(path);
+    char *tilda_path = rep_substr(full_path, "~", t_dirs_to_work.HOME);//mx_rep_tilda(path);
     if (tilda_path == NULL)
         tilda_path = mx_strdup(full_path);
 
@@ -154,8 +154,8 @@ int clear_cd(char **dest, t_cd_flags *flags) {
 
     int status = 0;
     if (tilda_path[0] == '/') {
-        mx_memset(t_global.PWD, '\0', mx_strlen(t_global.PWD));
-        t_global.PWD[0] = '/';
+        mx_memset(t_dirs_to_work.PWD, '\0', mx_strlen(t_dirs_to_work.PWD));
+        t_dirs_to_work.PWD[0] = '/';
     }
 
     char **arr = mx_strsplit(tilda_path, '/');
@@ -168,7 +168,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
     mx_del_strarr(&arr);
 
 
-    status = chdir(t_global.PWD);
+    status = chdir(t_dirs_to_work.PWD);
     if (status < 0) {
         mx_printerr("cd: ");
         char *err_tmp = mx_strdup(strerror(errno));
@@ -179,14 +179,14 @@ int clear_cd(char **dest, t_cd_flags *flags) {
         mx_printerr(": ");
         mx_printerr(full_path);
         mx_printerr("\n");
-        mx_memcpy(t_global.PWD, pwd, PATH_MAX);
+        mx_memcpy(t_dirs_to_work.PWD, pwd, PATH_MAX);
         return 1;
     } else {
-        if (mx_strcmp(t_global.OLDPWD, pwd)) {
-            mx_memcpy(t_global.OLDPWD, pwd, PATH_MAX);
-            status = setenv("OLDPWD", t_global.OLDPWD, 1);
+        if (mx_strcmp(t_dirs_to_work.OLDPWD, pwd)) {
+            mx_memcpy(t_dirs_to_work.OLDPWD, pwd, PATH_MAX);
+            status = setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
         }
-        status = setenv("PWD", t_global.PWD, 1);
+        status = setenv("PWD", t_dirs_to_work.PWD, 1);
     }
     if (full_path != NULL)
         free(full_path);
@@ -195,14 +195,14 @@ int clear_cd(char **dest, t_cd_flags *flags) {
 }
 
 static void change_to_root() {
-    char *pipe_ptr = strrchr(t_global.PWD, '/');
+    char *pipe_ptr = strrchr(t_dirs_to_work.PWD, '/');
     if (pipe_ptr)
         mx_memset(pipe_ptr, '\0', mx_strlen(pipe_ptr));
     else
-        t_global.PWD[0] = '/';
+        t_dirs_to_work.PWD[0] = '/';
     
-    if (t_global.PWD[0] == '\0')
-        t_global.PWD[0] = '/';
+    if (t_dirs_to_work.PWD[0] == '\0')
+        t_dirs_to_work.PWD[0] = '/';
 }
 
 static int handle_links(char *path_to_file) {
@@ -210,11 +210,11 @@ static int handle_links(char *path_to_file) {
     char buff[PATH_MAX];
     ssize_t bytes_num = 0;
 
-    mx_memcpy(pwd_tmp, t_global.PWD, PATH_MAX);
+    mx_memcpy(pwd_tmp, t_dirs_to_work.PWD, PATH_MAX);
 
     if(path_to_file[0] == '/') {
-        memset(t_global.PWD, 0, PATH_MAX);
-        t_global.PWD[0] = '/';
+        memset(t_dirs_to_work.PWD, 0, PATH_MAX);
+        t_dirs_to_work.PWD[0] = '/';
     }
 
     memset(buff, 0, PATH_MAX);
@@ -227,11 +227,11 @@ static int handle_links(char *path_to_file) {
         } else if (mx_strcmp(links[link_idx], ".") == 0) {
             add_dir(links[link_idx]);
         }
-        bytes_num = readlink(t_global.PWD, buff, PATH_MAX);
+        bytes_num = readlink(t_dirs_to_work.PWD, buff, PATH_MAX);
 
         if (bytes_num > 0 && mx_strcmp(links[link_idx], "..") && mx_strcmp(links[link_idx], ".")) {
             mx_del_strarr(&links);
-            mx_memcpy(t_global.PWD, pwd_tmp, PATH_MAX);
+            mx_memcpy(t_dirs_to_work.PWD, pwd_tmp, PATH_MAX);
             return 1;
         }
         mx_memset(buff, 0, mx_strlen(buff));
@@ -239,7 +239,7 @@ static int handle_links(char *path_to_file) {
 
     mx_del_strarr(&links);
 
-    int exit_status = chdir(t_global.PWD);
+    int exit_status = chdir(t_dirs_to_work.PWD);
 
     if (exit_status < 0) {
         mx_printerr("cd: ");
@@ -251,13 +251,13 @@ static int handle_links(char *path_to_file) {
         mx_printerr(": ");
         mx_printerr(path_to_file);
         mx_printerr("\n");
-        mx_memcpy(t_global.PWD, pwd_tmp, PATH_MAX);
+        mx_memcpy(t_dirs_to_work.PWD, pwd_tmp, PATH_MAX);
     } else {
-        if (mx_strcmp(t_global.OLDPWD, pwd_tmp)) {
-            mx_memcpy(t_global.OLDPWD, pwd_tmp, PATH_MAX);
-            exit_status = setenv("OLDPWD", t_global.OLDPWD, 1);
+        if (mx_strcmp(t_dirs_to_work.OLDPWD, pwd_tmp)) {
+            mx_memcpy(t_dirs_to_work.OLDPWD, pwd_tmp, PATH_MAX);
+            exit_status = setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
         }
-        exit_status = setenv("PWD", t_global.PWD, 1);
+        exit_status = setenv("PWD", t_dirs_to_work.PWD, 1);
     }
 
     return 0;
@@ -314,9 +314,9 @@ int count_dest(char **dest) {
 
 static void add_dir(char *dir) {
 
-    int pwd_len = mx_strlen(t_global.PWD);
-    if (t_global.PWD[pwd_len - 1] != '/')
-        t_global.PWD[mx_strlen(t_global.PWD)] = '/';
-    mx_memcpy(t_global.PWD + mx_strlen(t_global.PWD), dir, mx_strlen(dir));
+    int pwd_len = mx_strlen(t_dirs_to_work.PWD);
+    if (t_dirs_to_work.PWD[pwd_len - 1] != '/')
+        t_dirs_to_work.PWD[mx_strlen(t_dirs_to_work.PWD)] = '/';
+    mx_memcpy(t_dirs_to_work.PWD + mx_strlen(t_dirs_to_work.PWD), dir, mx_strlen(dir));
 
 }

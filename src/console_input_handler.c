@@ -9,7 +9,7 @@ void handle_ctrl_c(int sig) {
     printf("\n");
 
     if (pid == jobs->pid) {
-        mx_free_global();
+        free_dirs();
         exit(130);
     }
     else kill(pid, sig);
