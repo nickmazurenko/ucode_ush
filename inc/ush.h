@@ -86,16 +86,16 @@ int find_cd_flags(t_cd_flags *data, char **flags);
 
 // ENV block
 //===============================================================
-typedef struct s_flags_env
+typedef struct s_env_flags
 {
-    bool using_I;
-    bool using_U;
-    bool using_P;
-}              t_flags_env;
+    bool is_i_flag;
+    bool is_u_flag;
+    bool is_p_flag;
+}              t_env_flags;
 
-int mx_builtin_env(t_flags_env *flags, char **data);
-void mx_env_flags_init(t_flags_env *data);
-int mx_env_flags_set(t_flags_env *data, char **param);
+int clear_env(t_env_flags *env_flag, char **data);
+t_env_flags *create_env_flags(void);
+int find_env_flags(t_env_flags *env_flag, char **param);
 //===============================================================
 
 

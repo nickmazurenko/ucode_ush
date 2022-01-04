@@ -280,23 +280,18 @@ void print_cd_error(char wrong_flag) {
     mx_printerr("cd: usage: cd [-sP]\n");
 }
 
-int find_cd_flags(t_cd_flags *data, char **flags) {
-    if (flags[1] != NULL) {
-        int flags_len = mx_strlen(flags[1]);
-        if (flags[1][0] == '-') {
+int find_cd_flags(t_cd_flags *data, char **args) {
+    if (args[1] != NULL) {
+        int flags_len = mx_strlen(args[1]);
+        if (args[1][0] == '-') {
             for (int i = 1; i < flags_len; i++) {
-
-                switch (flags[1][i]) {
-                    case 'P':
-                        data->is_p_flag = true;
-                        break;
-                    case 's':
-                        data->is_s_flag = true;
-                        break;
-                    default:
-                        print_cd_error(flags[1][i]);
-                        return 1;
-                        break;
+                if(args[1][i] == 'P') {
+                    data->is_p_flag = true;
+                } else if(args[1][i] == 's') {
+                    data->is_s_flag = true;
+                } else {
+                    print_cd_error(args[1][i]);
+                    return 1;
                 }
             }
         }

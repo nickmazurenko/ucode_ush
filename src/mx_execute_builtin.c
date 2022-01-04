@@ -32,12 +32,12 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
 
     // ENV
     else if (!mx_strcmp("env", command)) {
-        t_flags_env env_flags;
-        mx_env_flags_init(&env_flags);
-        if (!mx_env_flags_set(&env_flags, params))
-            t_dirs_to_work.exit_status = mx_builtin_env(&env_flags, params);
+        t_env_flags *env_flags = create_env_flags();
+        if (!find_env_flags(env_flags, params))
+            t_dirs_to_work.exit_status = clear_env(env_flags, params);
         else
             t_dirs_to_work.exit_status = 1;
+        free(env_flags);
         return 0;
     }
 
@@ -48,6 +48,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
             t_dirs_to_work.exit_status = clear_pwd(pwd_flags);
         else
             t_dirs_to_work.exit_status = 1;
+        free(pwd_flags);
         return 0;
     }
 
@@ -118,10 +119,10 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
     // EXPORT
     else if (!mx_strcmp("export", command)) {
         if (params[1] == NULL) {
-            t_flags_env env_flags;
-            mx_env_flags_init(&env_flags);
-            mx_builtin_env(&env_flags, params);
+            t_env_flags *env_flags = create_env_flags();
+            clear_env(env_flags, params);
             t_dirs_to_work.exit_status = 0;
+            free(env_flags);
             return 0;
         }
 

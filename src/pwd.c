@@ -30,25 +30,19 @@ void print_pwd_error(char wrong_flag) {
     mx_printerr("pwd: usage: pwd [-LP]\n");
 }
 
-int find_pwd_flags(t_pwd_flags *pwd_flag, char **flags) {
-    if (flags[1] != NULL) {
-        if (flags[1][0] == '-') {
-            for (int i = 1; i < mx_strlen(flags[1]); i++) {
-
-                switch (flags[1][i])
-                {
-                    case 'P':
-                        pwd_flag->is_p_flag = true;
-                        pwd_flag->is_l_flag = false;
-                        break;
-                    case 'L':
-                        pwd_flag->is_l_flag = true;
-                        pwd_flag->is_p_flag = false;
-                        break;
-                    default:
-                        print_pwd_error(flags[1][i]);
-                        return 1;
-                        break;
+int find_pwd_flags(t_pwd_flags *pwd_flag, char **args) {
+    if (args[1] != NULL) {
+        if (args[1][0] == '-') {
+            for (int i = 1; i < mx_strlen(args[1]); i++) {
+                if(args[1][i] == 'P') {
+                    pwd_flag->is_p_flag = true;
+                    pwd_flag->is_l_flag = false;
+                } else if(args[1][i] == 'L') {
+                    pwd_flag->is_l_flag = true;
+                    pwd_flag->is_p_flag = false;
+                } else {
+                    print_pwd_error(args[1][i]);
+                    return 1;
                 }
             }
         }
