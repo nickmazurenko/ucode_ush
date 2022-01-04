@@ -43,12 +43,12 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
 
     // PWD
     else if (!mx_strcmp("pwd", command)) {
-        t_pwd_flags *pwd_flags = create_pwd_flags();
-        if (!find_pwd_flags(pwd_flags, params))
-            t_dirs_to_work.exit_status = clear_pwd(pwd_flags);
+        t_pwd_flags *pwd_flag = create_pwd_flags();
+        if (!find_pwd_flags(pwd_flag, params))
+            t_dirs_to_work.exit_status = clear_pwd(pwd_flag);
         else
             t_dirs_to_work.exit_status = 1;
-        free(pwd_flags);
+        free(pwd_flag);
         return 0;
     }
 
@@ -67,12 +67,12 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
     
     // WHICH
     else if (!mx_strcmp("which", command)) {
-        t_flags_which which_flags;
-        mx_which_flags_init(&which_flags);
-        if (!mx_which_flags_set(&which_flags, params))
-            t_dirs_to_work.exit_status = mx_builtin_which(&which_flags, params);
+        t_which_flags *which_flag = create_which_flags();
+        if (!find_which_flags(which_flag, params))
+            t_dirs_to_work.exit_status = clear_which(which_flag, params);
         else
             t_dirs_to_work.exit_status = 1;
+        free(which_flag);
         return 0;
     }
 
@@ -119,10 +119,10 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
     // EXPORT
     else if (!mx_strcmp("export", command)) {
         if (params[1] == NULL) {
-            t_env_flags *env_flags = create_env_flags();
-            clear_env(env_flags, params);
+            t_env_flags *env_flag = create_env_flags();
+            clear_env(env_flag, params);
             t_dirs_to_work.exit_status = 0;
-            free(env_flags);
+            free(env_flag);
             return 0;
         }
 

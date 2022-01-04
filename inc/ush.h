@@ -114,15 +114,15 @@ int find_pwd_flags(t_pwd_flags *pwd_flag, char **flags);
 
 // WHICH block
 //===============================================================
-typedef struct s_flags_which
+typedef struct s_which_flags
 {
-    bool using_A;
-    bool using_S;
-}              t_flags_which;
+    bool is_a_flag;
+    bool is_s_flag;
+}              t_which_flags;
 
-int mx_builtin_which(t_flags_which *flags, char **data);
-void mx_which_flags_init(t_flags_which *data);
-int mx_which_flags_set(t_flags_which *data, char **flags);
+int clear_which(t_which_flags *which_flag, char **args);
+t_which_flags *create_which_flags(void);
+int find_which_flags(t_which_flags *which_flag, char **args);
 //===============================================================
 
 // ECHO block
