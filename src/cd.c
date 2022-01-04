@@ -1,6 +1,6 @@
 #include "ush.h"
 static int handle_links(char *path_to_file);
-static void change_to_root();
+static void change_to_root(void);
 static void add_dir(char *dir);
 void print_cd_error(char wrong_flag);
 int find_cd_flags(t_cd_flags *data, char **flags);

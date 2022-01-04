@@ -43,10 +43,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
 
     // PWD
     else if (!mx_strcmp("pwd", command)) {
-        t_flags_pwd pwd_flags;
-        mx_pwd_flags_init(&pwd_flags);
-        if (!mx_pwd_flags_set(&pwd_flags, params))
-            t_dirs_to_work.exit_status = mx_builtin_pwd(&pwd_flags);
+        t_pwd_flags *pwd_flags = create_pwd_flags();
+        if (!find_pwd_flags(pwd_flags, params))
+            t_dirs_to_work.exit_status = clear_pwd(pwd_flags);
         else
             t_dirs_to_work.exit_status = 1;
         return 0;
@@ -56,10 +55,12 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
     else if (!mx_strcmp("cd", command)) {
         t_cd_flags *cd_flag = create_cd_flags();
 
-        if (!find_cd_flags(&cd_flag, params))
-            t_dirs_to_work.exit_status = clear_cd(params, &cd_flag);
+        if (!find_cd_flags(cd_flag, params))
+            t_dirs_to_work.exit_status = clear_cd(params, cd_flag);
         else
             t_dirs_to_work.exit_status = 1;
+
+        free(cd_flag);
         return 0;
     }
     

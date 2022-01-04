@@ -78,9 +78,9 @@ typedef struct s_cd_flags
     bool is_p_flag;
 }              t_cd_flags;
 
-int mx_builtin_cd(char **params, t_cd_flags *flags);
-void mx_cd_flags_init(t_cd_flags *data);
-int mx_cd_flags_set(t_cd_flags *data, char **flags);
+int clear_cd(char **params, t_cd_flags *flags);
+t_cd_flags *create_cd_flags(void);
+int find_cd_flags(t_cd_flags *data, char **flags);
 //===============================================================
 
 
@@ -101,15 +101,15 @@ int mx_env_flags_set(t_flags_env *data, char **param);
 
 // PWD block
 //===============================================================
-typedef struct s_flags_pwd
+typedef struct s_pwd_flags
 {
-    bool using_L;
-    bool using_P; //default
-}              t_flags_pwd;
+    bool is_l_flag;
+    bool is_p_flag; //default
+}              t_pwd_flags;
 
-int mx_builtin_pwd(t_flags_pwd *flags);
-void mx_pwd_flags_init(t_flags_pwd *data);
-int mx_pwd_flags_set(t_flags_pwd *data, char **flags);
+int clear_pwd(t_pwd_flags *flags);
+t_pwd_flags *create_pwd_flags(void);
+int find_pwd_flags(t_pwd_flags *pwd_flag, char **flags);
 //===============================================================
 
 // WHICH block
