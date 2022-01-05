@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 char *mx_strrep(char *str, char *substr, char *replace) {
     char *output = malloc(PATH_MAX);

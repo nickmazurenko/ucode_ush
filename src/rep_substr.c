@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 char *rep_substr(char *str, char *substr, char *new_str) {
     int index = mx_get_substr_index(str, substr);

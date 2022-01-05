@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 t_pwd_flags *create_pwd_flags(void);
 void print_pwd_error(char wrong_flag);
 int find_pwd_flags(t_pwd_flags *pwd_flag, char **flags);

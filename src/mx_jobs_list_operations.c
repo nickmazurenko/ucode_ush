@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 t_jobs *jobs_new_node(int pid, char *cmd) {
     t_jobs *res = (t_jobs *)malloc(sizeof(t_jobs));

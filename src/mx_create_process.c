@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 void mx_create_process(char *command, char **parameters, char *line) {
     int child_pid = fork();

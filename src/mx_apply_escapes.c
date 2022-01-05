@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 void mx_apply_escapes(char ***arr) {
     char **data = *arr;

@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 
 t_env_flags *create_env_flags(void);

@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i) {
     // EXIT

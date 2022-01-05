@@ -1,5 +1,5 @@
 
-#include "../inc/ush.h"
+#include "ush.h"
 
 int mx_unset_check_param(char **data) {
     for (int i = 1; data[i] != NULL; i++) {
