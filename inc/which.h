@@ -1,6 +1,6 @@
 
-#ifndef UCODE_USH_WHICH_H
-#define UCODE_USH_WHICH_H
+#ifndef WHICH_H
+#define WHICH_H
 
 #include "libmx.h"
 
@@ -17,4 +17,4 @@ t_which_flags *create_which_flags(void);
 int find_which_flags(t_which_flags *which_flag, char **args);
 //===============================================================
 
-#endif //UCODE_USH_WHICH_H
+#endif //WHICH_H

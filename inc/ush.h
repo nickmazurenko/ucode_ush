@@ -1,4 +1,5 @@
-#pragma once
+#ifndef USH_H
+#define USH_H
 #define _GNU_SOURCE
 #define _SVID_SOURCE
 #define _POSIX_C_SOURCE 200809L //for setenv() and unsetenv()
@@ -70,11 +71,4 @@ int mx_input(char **str, int win_len);
 void mx_read_command(char **line);
 int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i);
 
-
-//===============================================================
-
-int mx_builtin_unset(const char *name);
-int mx_unset_check_param(char **data);
-
-//===============================================================
-int mx_atoi(char *);
+#endif /*USH_H*/
