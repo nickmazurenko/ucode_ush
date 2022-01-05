@@ -15,7 +15,7 @@ int execute_commands(char** commands_arr) {
         command = mx_strdup(parameters[0]);
 
         if (mx_execute_builtin(command, parameters, &commands_arr, i)) {
-            mx_apply_escapes(&parameters);
+            handle_escape_symbols(&parameters);
             mx_create_process(command, parameters, commands_arr[i]);
         }
 
