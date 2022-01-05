@@ -1,6 +1,6 @@
 #include "ush.h"
 
-char *rep_substr(char *str, char *substr, char *new_str) {
+char *replace_substr_new(char *str, char *substr, char *new_str) {
     int index = mx_get_substr_index(str, substr);
     if (index == -1)
         return NULL;

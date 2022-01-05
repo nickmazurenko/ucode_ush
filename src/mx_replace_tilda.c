@@ -94,7 +94,7 @@ void mx_replace_tilda(char **str) {
         if (index == -1)
             break;
         
-        //*str = rep_substr(*str, "~", t_global.HOME);
+        //*str = replace_substr_new(*str, "~", t_global.HOME);
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);

@@ -35,12 +35,12 @@
 extern char **environ;
 void initialise_dirs(void);
 void free_dirs(void);
-char *mx_strrep(char *str, char *substr, char *replace);
+char *mx_replace_substr_new(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
 int mx_command_substitution(char **str);
 void handle_escape_symbols(char ***arr);
 void mx_create_process(char *command, char **parameters, char *cmd);
-char *rep_substr(char *str, char *substr, char *new_str);
+char *replace_substr_new(char *str, char *substr, char *new_str);
 
 struct s_dirs_to_work
 {
@@ -70,33 +70,10 @@ int mx_input(char **str, int win_len);
 void mx_read_command(char **line);
 int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i);
 
-// CD block
-//===============================================================
-typedef struct s_cd_flags
-{
-    bool is_s_flag;
-    bool is_p_flag;
-}              t_cd_flags;
-
-int clear_cd(char **params, t_cd_flags *flags);
-t_cd_flags *create_cd_flags(void);
-int find_cd_flags(t_cd_flags *data, char **flags);
-//===============================================================
 
 
-// ENV block
-//===============================================================
-typedef struct s_env_flags
-{
-    bool is_i_flag;
-    bool is_u_flag;
-    bool is_p_flag;
-}              t_env_flags;
 
-int clear_env(t_env_flags *env_flag, char **data);
-t_env_flags *create_env_flags(void);
-int find_env_flags(t_env_flags *env_flag, char **param);
-//===============================================================
+
 
 
 // PWD block

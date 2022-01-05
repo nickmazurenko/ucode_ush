@@ -1,6 +1,6 @@
 #include "ush.h"
 
-char *mx_strrep(char *str, char *substr, char *replace) {
+char *mx_replace_substr_new(char *str, char *substr, char *replace) {
     char *output = malloc(PATH_MAX);
     mx_memset(output, 0, PATH_MAX);
     int i = 0, j = 0, flag = 0, start = 0;

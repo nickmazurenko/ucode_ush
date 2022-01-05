@@ -1,29 +1,29 @@
 #include "ush.h"
 
 void mx_create_process(char *command, char **parameters, char *line) {
-    int child_pid = fork();
-    if (child_pid == 0) {
+    int child_process_id = fork();
+    if (child_process_id == 0) {
         if (getenv("PATH") == NULL) {
             mx_printerr("ush: command not found: ");
             mx_printerr(command);
             mx_printerr("\n");
             exit(1);
         }
-        char **path_dir = mx_strsplit(getenv("PATH"), ':');
+        char **dir_paths = mx_strsplit(getenv("PATH"), ':');
 
-        for (int i = 0; path_dir[i] != NULL; i++) {
+        for (int dir_path_index = 0; dir_paths[dir_path_index] != NULL; dir_path_index++) {
             int exec_status = 0;
-            char *cmd = NULL;
+            char *command_full_path = NULL;
             if (command[0] != '/') {
-                cmd = mx_strjoin(path_dir[i], "/");
-                cmd = mx_strjoin(cmd, command);
+                command_full_path = mx_strjoin(dir_paths[dir_path_index], "/");
+                command_full_path = mx_strjoin(command_full_path, command);
             }
-            else 
-                cmd = mx_strdup(command);
-            exec_status = execve(cmd, parameters, environ); //execute command
-            free(cmd);
+            else
+                command_full_path = mx_strdup(command);
+            exec_status = execve(command_full_path, parameters, environ); //execute command
+            free(command_full_path);
             if (exec_status != -1) {
-                mx_del_strarr(&path_dir);
+                mx_del_strarr(&dir_paths);
                 exit(0);
             }
         }
@@ -31,17 +31,17 @@ void mx_create_process(char *command, char **parameters, char *line) {
         mx_printerr("ush: command not found: ");
         mx_printerr(command);
         mx_printerr("\n");
-        mx_del_strarr(&path_dir);
+        mx_del_strarr(&dir_paths);
         exit(1);
     }
     else {
-        t_jobs *new_process = jobs_new_node(child_pid, line);
+        t_jobs *new_process = jobs_new_node(child_process_id, line);
         jobs_push_back(&jobs, &new_process);
         int child_status = 0;
-        waitpid(child_pid, &child_status, WUNTRACED);
+        waitpid(child_process_id, &child_status, WUNTRACED);
         t_dirs_to_work.exit_status = WEXITSTATUS(child_status);
         if (!WIFSTOPPED(child_status))
-            jobs_remove(&jobs, child_pid);
+            jobs_remove(&jobs, child_process_id);
         else
             t_dirs_to_work.exit_status = 147;
         

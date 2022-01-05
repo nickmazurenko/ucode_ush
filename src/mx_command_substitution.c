@@ -21,7 +21,7 @@ int check_pipe_commands(char** commands, char **str, char* echo_command, char* e
         replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
 
-        *str = mx_strrep(*str, echo_command_copy, replace_value);
+        *str = mx_replace_substr_new(*str, echo_command_copy, replace_value);
         free(replace_value);
         free(command);
     }
@@ -122,7 +122,7 @@ int handle_dollars(char* data, char** str) {
 
             if (variable_name[0] == '?') {
                 char *status = mx_itoa(t_dirs_to_work.exit_status);
-                *str = rep_substr(*str, replaced_str, status);
+                *str = replace_substr_new(*str, replaced_str, status);
                 free(status);
                 free(replaced_str);
                 free(variable_name);
@@ -137,7 +137,7 @@ int handle_dollars(char* data, char** str) {
             else
                 variable_value = mx_strdup(get_env_value);
 
-            *str = rep_substr(*str, replaced_str, variable_value);
+            *str = replace_substr_new(*str, replaced_str, variable_value);
 
             free(variable_value);
             free(replaced_str);
@@ -196,7 +196,7 @@ int handle_dollars(char* data, char** str) {
             else
                 variable_value = mx_strdup(get_env_value);
 
-            *str = rep_substr(*str, replaced_str, variable_value);
+            *str = replace_substr_new(*str, replaced_str, variable_value);
 
             free(variable_value);
             free(replaced_str);
@@ -274,7 +274,7 @@ int handle_dollars(char* data, char** str) {
         replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
 
-        *str = rep_substr(*str, replaced_str, replace_value);
+        *str = replace_substr_new(*str, replaced_str, replace_value);
         free(replace_value);
         free(command);
         free(income_command);

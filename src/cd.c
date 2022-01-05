@@ -1,4 +1,6 @@
 #include "ush.h"
+#include "cd.h"
+
 static int handle_links(char *path_to_file);
 static void change_to_root(void);
 static void add_dir(char *dir);
@@ -53,7 +55,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
                 mx_memset(t_dirs_to_work.OLDPWD, 0, PATH_MAX);
                 mx_memcpy(t_dirs_to_work.OLDPWD, getenv("OLDPWD"), mx_strlen(getenv("OLDPWD")));
 
-                char *test = mx_strrep(t_dirs_to_work.PWD, t_dirs_to_work.HOME, TILDA);
+                char *test = mx_replace_substr_new(t_dirs_to_work.PWD, t_dirs_to_work.HOME, TILDA);
 
                 if (test != NULL)
                     free(test);
@@ -67,7 +69,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
         if (dest[1][0] == '-')
             break;
         else {
-            char *tmp = mx_strrep(t_dirs_to_work.PWD, dest[1], dest[2]);
+            char *tmp = mx_replace_substr_new(t_dirs_to_work.PWD, dest[1], dest[2]);
             if (tmp != NULL) {
                 free(full_path);
                 full_path = tmp;
@@ -87,7 +89,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
             free(full_path);
             return 1;
         } else {
-            char *tmp = mx_strrep(t_dirs_to_work.PWD, dest[2], dest[3]);
+            char *tmp = mx_replace_substr_new(t_dirs_to_work.PWD, dest[2], dest[3]);
             if (tmp != NULL) {
                 free(full_path);
                 full_path = tmp;
@@ -101,7 +103,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
         break;
     }
 
-    char *tilda_path = rep_substr(full_path, "~", t_dirs_to_work.HOME);//mx_rep_tilda(path);
+    char *tilda_path = replace_substr_new(full_path, "~", t_dirs_to_work.HOME);//mx_rep_tilda(path);
     if (tilda_path == NULL)
         tilda_path = mx_strdup(full_path);
 

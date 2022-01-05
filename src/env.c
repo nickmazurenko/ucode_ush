@@ -1,5 +1,5 @@
 #include "ush.h"
-
+#include "env.h"
 
 t_env_flags *create_env_flags(void);
 void print_env_error(char wrong_flag);
