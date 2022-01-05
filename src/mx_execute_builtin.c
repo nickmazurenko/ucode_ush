@@ -4,20 +4,16 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
     // EXIT
     if (!mx_strcmp("exit", command)) {
         int ext_val = 0;
-        if (params[1] != NULL)
+        if (params[1] != NULL) {
             ext_val = mx_atoi(params[1]);
-
+        }
         free(command);
         mx_del_strarr(&params);
         mx_del_strarr(commands_arr);
-
         exit(ext_val);
-    }
 
-    // UNSET
-    else if (!mx_strcmp("unset", command)) {
+    } else if (!mx_strcmp("unset", command)) {
         if (mx_unset_check_param(params) == 0) {
-        
             for (int i = 1; params[i] != NULL; i++) {
                 if (mx_builtin_unset(params[i]) < 0) {
                     perror("ush: unset");
@@ -25,70 +21,59 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
                     continue;
                 }
             }
-            
         }
         return 0;
-    }
 
-    // ENV
-    else if (!mx_strcmp("env", command)) {
+    } else if (!mx_strcmp("env", command)) {
         t_env_flags *env_flags = create_env_flags();
-        if (!find_env_flags(env_flags, params))
+        if (!find_env_flags(env_flags, params)) {
             t_dirs_to_work.exit_status = clear_env(env_flags, params);
-        else
+        } else {
             t_dirs_to_work.exit_status = 1;
+        }
         free(env_flags);
         return 0;
-    }
 
-    // PWD
-    else if (!mx_strcmp("pwd", command)) {
+    } else if (!mx_strcmp("pwd", command)) {
         t_pwd_flags *pwd_flag = create_pwd_flags();
-        if (!find_pwd_flags(pwd_flag, params))
+        if (!find_pwd_flags(pwd_flag, params)) {
             t_dirs_to_work.exit_status = clear_pwd(pwd_flag);
-        else
+        } else {
             t_dirs_to_work.exit_status = 1;
+        }
         free(pwd_flag);
         return 0;
-    }
 
-    // CD
-    else if (!mx_strcmp("cd", command)) {
+    } else if (!mx_strcmp("cd", command)) {
         t_cd_flags *cd_flag = create_cd_flags();
 
-        if (!find_cd_flags(cd_flag, params))
+        if (!find_cd_flags(cd_flag, params)) {
             t_dirs_to_work.exit_status = clear_cd(params, cd_flag);
-        else
+        } else {
             t_dirs_to_work.exit_status = 1;
-
+        }
         free(cd_flag);
         return 0;
-    }
-    
-    // WHICH
-    else if (!mx_strcmp("which", command)) {
+
+    } else if (!mx_strcmp("which", command)) {
         t_which_flags *which_flag = create_which_flags();
-        if (!find_which_flags(which_flag, params))
+        if (!find_which_flags(which_flag, params)) {
             t_dirs_to_work.exit_status = clear_which(which_flag, params);
-        else
+        } else {
             t_dirs_to_work.exit_status = 1;
+        }
         free(which_flag);
         return 0;
-    }
-
-    // ECHO
-    else if (!mx_strcmp("echo", command)) {
-        t_flags_echo echo_flags;
-        mx_echo_flags_init(&echo_flags);
-        if (!mx_echo_flags_set(&echo_flags, params))
-            t_dirs_to_work.exit_status = mx_builtin_echo(&echo_flags, &(*commands_arr)[i]);
-        else
+    } else if (!mx_strcmp("echo", command)) {
+        t_echo_flags *echo_flag = create_echo_flags();
+        if (!find_echo_flags(echo_flag, params)) {
+            t_dirs_to_work.exit_status = clear_echo(echo_flag, &(*commands_arr)[i]);
+        } else {
             t_dirs_to_work.exit_status = 1;
+        }
         return 0;
-    }
 
-    // fg
-    else if (!mx_strcmp("fg", command)) {
+    } else if (!mx_strcmp("fg", command)) {
         if (params[1] == NULL)
             return 0;
         
@@ -109,15 +94,13 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         if (!WIFSTOPPED(child_status))
             jobs_remove(&jobs, node->pid);
             
-        if (WIFSIGNALED(child_status))
+        if (WIFSIGNALED(child_status)) {
             t_dirs_to_work.exit_status = 130;
-        else
+        } else {
             t_dirs_to_work.exit_status = 0;
+        }
         return 0;
-    }
-
-    // EXPORT
-    else if (!mx_strcmp("export", command)) {
+    } else if (!mx_strcmp("export", command)) {
         if (params[1] == NULL) {
             t_env_flags *env_flag = create_env_flags();
             clear_env(env_flag, params);

@@ -127,16 +127,16 @@ int find_which_flags(t_which_flags *which_flag, char **args);
 
 // ECHO block
 //===============================================================
-typedef struct s_flags_echo
+typedef struct s_echo_flags
 {
-    bool using_N;
-    bool using_e;
-    bool using_E;
-}              t_flags_echo;
+    bool is_n_flag;
+    bool is_e_flag;
+    bool is_E_flag;
+}              t_echo_flags;
 
-int mx_builtin_echo(t_flags_echo *flags, char **str);
-void mx_echo_flags_init(t_flags_echo *data);
-int mx_echo_flags_set(t_flags_echo *data, char **flags);
+int clear_echo(t_echo_flags *echo_flag, char **args);
+t_echo_flags *create_echo_flags(void);
+int find_echo_flags(t_echo_flags *echo_flags, char **args);
 //===============================================================
 
 int mx_builtin_unset(const char *name);
