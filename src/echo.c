@@ -1,4 +1,4 @@
-#include "../inc/ush.h"
+#include "ush.h"
 
 static void process_echo_args(char **args);
 static void del_extra_spaces(char **str);
@@ -75,8 +75,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 }
                 count++;
                 is_par = true;
-            }
-            else if (str[str_idx] == '\\') {
+            } else if (str[str_idx] == '\\') {
                 if (!is_par) {
                     for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
                         str[tmp_idx] = str[tmp_idx + 1];
@@ -88,14 +87,12 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             if(isWrite) {
                 mx_printstr(str);
             }
-        }
-        else {
+        } else {
             mx_printerr("Odd number of quotes.\n");
             mx_del_strarr(&data);
             return 1;
         }
-    }
-    else if (echo_flag->is_e_flag || echo_flag->is_E_flag) {
+    } else if (echo_flag->is_e_flag || echo_flag->is_E_flag) {
         bool isWrite = true;
         char *str = NULL;
         str = mx_strnew(PATH_MAX);
@@ -109,8 +106,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             fclose(file);
             free(path);
             isWrite = false;
-        }
-        else {
+        } else {
             mx_strcat(str, ptr);
         }
         int count = 0;
@@ -122,8 +118,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 }
                 count++;
                 is_par = true;
-            }
-            else if (str[str_idx] == '\\') {
+            } else if (str[str_idx] == '\\') {
                 if (!is_par) {
                     for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
                         str[tmp_idx] = str[tmp_idx + 1];
@@ -136,14 +131,12 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 mx_printstr(str);
                 mx_printchar('\n');
             }
-        }
-        else {
+        } else {
             mx_printerr("Odd number of quotes.\n");
             mx_del_strarr(&data);
             return 1;
         }
-    }
-    else {
+    } else {
         bool isWrite = true;
         char *str = NULL;
         str = mx_strnew(PATH_MAX);
@@ -157,8 +150,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             fclose(file);
             free(path);
             isWrite = false;
-        }
-        else {
+        } else {
             mx_strcat(str, ptr);
         }
         int count = 0;
@@ -170,8 +162,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 }
                 count++;
                 is_par = true;
-            }
-            else if (str[str_idx] == '\\') {
+            } else if (str[str_idx] == '\\') {
                 if (!is_par) {
                     for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
                         str[tmp_idx] = str[tmp_idx + 1];
@@ -184,8 +175,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 mx_printstr(str);
                 mx_printchar('\n');
             }
-        }
-        else {
+        } else {
             mx_printerr("Odd number of quotes.\n");
             mx_del_strarr(&data);
             return 1;
