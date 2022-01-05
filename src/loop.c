@@ -2,7 +2,6 @@
 
 int execute_commands(char** commands_arr) {
 
-
     char **parameters = NULL;
     char * command = NULL;
 
@@ -39,18 +38,27 @@ int loop() {
         mx_read_command(&line);
 
         char **commands_arr = mx_strsplit(line, ';');
-        for (int i = 0; commands_arr[i] != NULL; i++) {
-            char *ptr = commands_arr[i];
-            char *tmp_ptr = ptr;
-            while (*tmp_ptr != '\0' && !mx_isalpha(*tmp_ptr)) {
-                *tmp_ptr = '\0';
-                for (; *(tmp_ptr + 1) != '\0';) {
-                    mx_swap_char(tmp_ptr, tmp_ptr + 1);
-                    tmp_ptr++;
-                }
-                tmp_ptr = ptr;
-            }
-        }
+        // TODO: ush>+a -> command not found: a
+//        for (int i = 0; commands_arr[i] != NULL; i++) {
+//            char *command = mx_strdup(commands_arr[i]);
+//            char *tmp_command = command;
+//            while (*tmp_command != '\0' && !mx_isalpha(*tmp_command)) {
+//                *tmp_command = '\0';
+//                for (; *(tmp_command + 1) != '\0';) {
+//                    mx_swap_char(tmp_command, tmp_command + 1);
+//                    tmp_command++;
+//                }
+//                tmp_command = command;
+//            }
+//
+//            if (command[0] != '\0') {
+//                free(commands_arr[i]);
+//                commands_arr[i] = command;
+//            } else {
+//                free(command);
+//            }
+//
+//        }
         free(line);
         line = NULL;
 

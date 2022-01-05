@@ -1,4 +1,39 @@
 #include "ush.h"
+#include "utils.h"
+
+int mx_get_substr_index_new(char *str, const char *sub_str) {
+    if (str == NULL) return  -1;
+
+    char *sub_str_ptr = mx_strstr_new(str ,sub_str);
+    if (sub_str_ptr == NULL) return -1;
+    else return (int)sub_str_ptr - (int)str;
+}
+
+char mx_char_to_upper(char symbol) {
+    if (mx_isalpha(symbol)) {
+        if (symbol < 97) symbol += 32;
+    }
+    return symbol;
+}
+
+void str_to_upper_case(char* str) {
+    if (str == NULL) return;
+    for (; *str != '\0'; str++) {
+        if (mx_isalpha(*str)) {
+            if (*str < 97) {
+                *str = *str + 32;
+            }
+        }
+    }
+}
+
+void str_shift_left(char *str, char stop_symbol) {
+    if (str == NULL) return;
+    char *tmp = str;
+    for (; *(tmp + 1) != stop_symbol; tmp++) {
+        mx_swap_char(tmp, (tmp + 1));
+    }
+}
 
 char *mx_strstr_new(const char *haystack, const char *needle) {
 

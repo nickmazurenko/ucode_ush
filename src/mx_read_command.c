@@ -8,9 +8,13 @@ void mx_read_command(char **line) {
     char* trimmed_line = mx_strtrim(*line);
 
     free(*line);
-    *line = trimmed_line;
+
+    if (trimmed_line != NULL)
+        *line = trimmed_line;
+    else
+        *line = mx_strnew(0);
 
     mx_replace_tilda(line);
-    
+
     if (size == 0) return;
 }
