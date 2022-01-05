@@ -250,7 +250,6 @@ t_cd_flags *create_cd_flags(void) {
     return flag;
 }
 
-//TODO send to file with errors
 void print_cd_error(char wrong_flag) {
     mx_printerr("ush: cd: -");
     mx_printerr(&wrong_flag);
