@@ -1,6 +1,6 @@
 #include "ush.h"
 
-void mx_read_command(char **line) {
+void read_command(char **line) {
     *line = mx_strnew(0);
     int size = 0;
 

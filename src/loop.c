@@ -13,9 +13,9 @@ int execute_commands(char** commands_arr) {
         parameters = mx_strsplit(commands_arr[i], ' ');
         command = mx_strdup(parameters[0]);
 
-        if (mx_execute_builtin(command, parameters, &commands_arr, i)) {
+        if (setup_builtin(command, parameters, &commands_arr, i)) {
             handle_escape_symbols(&parameters);
-            mx_create_process(command, parameters, commands_arr[i]);
+            create_process(command, parameters, commands_arr[i]);
         }
 
         free(command);
@@ -26,7 +26,6 @@ int execute_commands(char** commands_arr) {
 
 int loop() {
 
-//    char *command = NULL, **parameters = NULL, *line = NULL;
     char* line = NULL;
 
     while (true) {
@@ -35,7 +34,7 @@ int loop() {
 
         if (isatty(0))
             mx_print_prompt();
-        mx_read_command(&line);
+        read_command(&line);
 
         char **commands_arr = mx_strsplit(line, ';');
         // TODO: ush>+a -> command not found: a

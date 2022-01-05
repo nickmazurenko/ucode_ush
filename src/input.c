@@ -1,6 +1,6 @@
 #include "ush.h"
 
-int mx_input(char **str, int win_len) {
+int input(char **str, int win_len) {
     int res = read(0, *str, win_len);
     if (!res) {
         size_t n = win_len - 5;

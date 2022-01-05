@@ -3,7 +3,6 @@
 
 #include "libmx.h"
 
-
 typedef struct s_echo_flags
 {
     bool is_n_flag;

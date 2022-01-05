@@ -40,7 +40,7 @@ char *mx_replace_substr_new(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
 int mx_command_substitution(char **str);
 void handle_escape_symbols(char ***arr);
-void mx_create_process(char *command, char **parameters, char *cmd);
+void create_process(char *command, char **parameters, char *cmd);
 char *replace_substr_new(char *str, char *substr, char *new_str);
 
 struct s_dirs_to_work
@@ -67,8 +67,8 @@ void jobs_push_back(t_jobs **list, t_jobs **data);
 int jobs_remove(t_jobs **head, int pid);
 
 void mx_print_prompt(void);
-int mx_input(char **str, int win_len);
-void mx_read_command(char **line);
-int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i);
+int input(char **str, int win_len);
+void read_command(char **line);
+int setup_builtin(char *command, char **params, char ***commands_arr, int i);
 
 #endif /*USH_H*/

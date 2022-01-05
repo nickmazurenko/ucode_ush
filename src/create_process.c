@@ -1,6 +1,6 @@
 #include "ush.h"
 
-void mx_create_process(char *command, char **parameters, char *line) {
+void create_process(char *command, char **parameters, char *line) {
     int child_process_id = fork();
     if (child_process_id == 0) {
         if (getenv("PATH") == NULL) {

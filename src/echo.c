@@ -11,7 +11,6 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
     del_extra_spaces(args);
     *args = mx_strtrim(*args);
     // TODO check if macos works the same
-//    process_echo_args(args);
 
     char **data = mx_strsplit(*args, '>');
     char *ptr = data[0];

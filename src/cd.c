@@ -10,7 +10,6 @@ int count_dest(char **dest);
 t_cd_flags *create_cd_flags(void);
 void change_to_pwd(void);
 
-// full cd function
 int clear_cd(char **dest, t_cd_flags *flags) {
     handle_escape_symbols(&dest);
 

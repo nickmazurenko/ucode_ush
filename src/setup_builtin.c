@@ -4,7 +4,7 @@
 #include "which.h"
 #include "echo.h"
 
-int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i) {
+int setup_builtin(char *command, char **params, char ***commands_arr, int i) {
     // EXIT
     if (!mx_strcmp("exit", command)) {
         int ext_val = 0;
@@ -17,7 +17,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         exit(ext_val);
 
     } else if (!mx_strcmp("unset", command)) {
-        if (mx_unset_check_param(params) == 0) {
+        if (unset_check_args(params) == 0) {
             for (int i = 1; params[i] != NULL; i++) {
                 if (clear_unset(params[i]) < 0) {
                     perror("ush: unset");

@@ -12,7 +12,6 @@ void mx_replace_tilda(char **str) {
     int home_len = mx_strlen(t_dirs_to_work.HOME);
 
 
-    // Loop for '~+/' which equals to PWD
     while (true) {
         index = mx_get_substr_index_new(*str, "~+/");
         if (index == -1)

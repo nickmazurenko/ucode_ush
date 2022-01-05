@@ -96,7 +96,7 @@ int clear_env(t_env_flags *env_flag, char **args) {
                     t_dirs_to_work.exit_status = 0;
                     return 0;
                 }
-                mx_create_process(args[3], args + 3, args[3]);
+                create_process(args[3], args + 3, args[3]);
                 return 0;
             }
         } else if (env_flag->is_p_flag) {
@@ -144,7 +144,7 @@ int clear_env(t_env_flags *env_flag, char **args) {
 
         } else {
             if (args[1] != NULL) {
-                mx_create_process(args[1], args + 1, args[1]);
+                create_process(args[1], args + 1, args[1]);
             }
         }
     }
