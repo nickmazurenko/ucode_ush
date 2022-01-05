@@ -1,4 +1,5 @@
 #include "ush.h"
+#include "echo.h"
 
 static void process_echo_args(char **args);
 static void del_extra_spaces(char **str);

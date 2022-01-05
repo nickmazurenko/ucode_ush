@@ -71,20 +71,6 @@ void mx_read_command(char **line);
 int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i);
 
 
-
-
-// ECHO block
-//===============================================================
-typedef struct s_echo_flags
-{
-    bool is_n_flag;
-    bool is_e_flag;
-    bool is_E_flag;
-}              t_echo_flags;
-
-int clear_echo(t_echo_flags *echo_flag, char **args);
-t_echo_flags *create_echo_flags(void);
-int find_echo_flags(t_echo_flags *echo_flags, char **args);
 //===============================================================
 
 int mx_builtin_unset(const char *name);
