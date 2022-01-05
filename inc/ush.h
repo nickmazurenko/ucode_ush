@@ -38,7 +38,7 @@ void free_dirs(void);
 char *mx_strrep(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
 int mx_command_substitution(char **str);
-void mx_apply_escapes(char ***arr);
+void handle_escape_symbols(char ***arr);
 void mx_create_process(char *command, char **parameters, char *cmd);
 char *rep_substr(char *str, char *substr, char *new_str);
 

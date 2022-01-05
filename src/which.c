@@ -6,7 +6,7 @@ int find_which_flags(t_which_flags *which_flag, char **args);
 
 
 int clear_which(t_which_flags *which_flag, char **args) {
-    mx_apply_escapes(&args);
+    handle_escape_symbols(&args);
     DIR *d;
     struct dirent *main_info;
     struct stat side_info;

@@ -10,7 +10,7 @@ void change_to_pwd(void);
 
 // full cd function
 int clear_cd(char **dest, t_cd_flags *flags) {
-    mx_apply_escapes(&dest);
+    handle_escape_symbols(&dest);
 
     int dest_idx = 0;
     char buff[PATH_MAX];

@@ -9,7 +9,7 @@ void set_var_error(char *arg);
 void no_fd_error(char *fd);
 
 int clear_env(t_env_flags *env_flag, char **args) {
-    mx_apply_escapes(&args);
+    handle_escape_symbols(&args);
 
     if (args[1] == NULL) { //print all variables
         int i = 1;

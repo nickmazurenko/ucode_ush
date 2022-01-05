@@ -1,6 +1,6 @@
 #include "ush.h"
 
-void mx_apply_escapes(char ***arr) {
+void handle_escape_symbols(char ***arr) {
     char **data = *arr;
 
     for (int i = 0; data[i] != NULL; i++) {
@@ -23,31 +23,20 @@ void mx_apply_escapes(char ***arr) {
 
         char *ptr = mx_strchr(data[i], '\\');
         while ( ptr != NULL ) {
-            switch (*(ptr + 1))
-            {
-            case 'n':
+            if (*(ptr + 1) == 'n') {
                 *ptr = '\n';
-                break;
-            case 't':
+            } else if (*(ptr + 1) == 't') {
                 *ptr = '\t';
-                break;
-            case '\\':
+            } else if (*(ptr + 1) == '\\') {
                 *ptr = '\\';
-                break;
-            case '\'':
+            } else if(*(ptr + 1) == '\'') {
                 *ptr = '\'';
-                break;
-            case '"':
+            } else if(*(ptr + 1) == '"') {
                 *ptr = '\"';
-                break;
-            case '`':
+            } else if(*(ptr + 1) == '`') {
                 *ptr = '`';
-                break;
-            case 'a':
+            } else if(*(ptr + 1) == 'a') {
                 *ptr = '\a';
-                break;
-            default:
-                break;
             }
             
             ptr++;
