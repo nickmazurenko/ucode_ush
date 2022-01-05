@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-static void process_args(char **str);
+static void process_echo_args(char **str);
 static void del_extra_spaces(char **str);
 t_echo_flags *create_echo_flags(void);
 int find_echo_flags(t_echo_flags *echo_flags, char **args);
@@ -9,7 +9,7 @@ int find_echo_flags(t_echo_flags *echo_flags, char **args);
 int clear_echo(t_echo_flags *echo_flag, char **args) {
     del_extra_spaces(args);
     *args = mx_strtrim(*args);
-    process_args(args);
+    process_echo_args(args);
 
     char **data = mx_strsplit(*args, '>');
     char *ptr = data[0];
@@ -192,16 +192,12 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             return 1;
         }
     }
-    /*
-    else 
-        mx_printchar('\n');
-    */
 
     mx_del_strarr(&data);
     return 0;
 }
 
-static void process_args(char **args) {
+static void process_echo_args(char **args) {
     char *str_ptr = mx_strchr(*args, '"');
     if (str_ptr != NULL) {
         char *slash_ptr = mx_strchr(str_ptr, '\\');
