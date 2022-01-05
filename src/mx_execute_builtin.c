@@ -15,7 +15,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
     } else if (!mx_strcmp("unset", command)) {
         if (mx_unset_check_param(params) == 0) {
             for (int i = 1; params[i] != NULL; i++) {
-                if (mx_builtin_unset(params[i]) < 0) {
+                if (clear_unset(params[i]) < 0) {
                     perror("ush: unset");
                     t_dirs_to_work.exit_status = 1;
                     continue;
