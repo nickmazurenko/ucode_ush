@@ -29,14 +29,16 @@ void handle_escape_symbols(char ***arr) {
                 *ptr = '\t';
             } else if (*(ptr + 1) == '\\') {
                 *ptr = '\\';
-            } else if(*(ptr + 1) == '\'') {
+            } else if (*(ptr + 1) == '\'') {
                 *ptr = '\'';
-            } else if(*(ptr + 1) == '"') {
+            } else if (*(ptr + 1) == '"') {
                 *ptr = '\"';
-            } else if(*(ptr + 1) == '`') {
+            } else if (*(ptr + 1) == '`') {
                 *ptr = '`';
-            } else if(*(ptr + 1) == 'a') {
+            } else if (*(ptr + 1) == 'a') {
                 *ptr = '\a';
+            } else if (*(ptr + 1) == '0') {
+                *ptr = '\0';
             }
             
             ptr++;

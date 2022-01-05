@@ -34,3 +34,4 @@ void handle_ctrl_z(int sig) {
     printf("[%d]  Stopped\t\t\t%s\n", job_id, node->cmd);
     return;
 }
+

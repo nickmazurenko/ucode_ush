@@ -294,7 +294,6 @@ int mx_command_substitution(char **str) {
     if (result) return result;
 
     result = handle_dollars(data, str);
-
     if (result) return result;
 
     return 0;

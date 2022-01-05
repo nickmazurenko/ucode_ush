@@ -37,6 +37,7 @@ int loop() {
         read_command(&line);
 
         char **commands_arr = mx_strsplit(line, ';');
+
         // TODO: ush>+a -> command not found: a
 //        for (int i = 0; commands_arr[i] != NULL; i++) {
 //            char *command = mx_strdup(commands_arr[i]);

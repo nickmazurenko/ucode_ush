@@ -5,8 +5,15 @@ void read_command(char **line) {
     int size = 0;
 
     getline(line, &size, stdin);
+    size = mx_strlen(*line);
+    if(size > 0) {
+        (*line)[size - 1] = '\0';
+    }
     char* trimmed_line = mx_strtrim(*line);
-
+//    if((*line)[size] == EOF) {
+//        mx_printerr("hello\n");
+//        mx_printerr("\n");
+//    }
     free(*line);
 
     if (trimmed_line != NULL)
@@ -15,6 +22,6 @@ void read_command(char **line) {
         *line = mx_strnew(0);
 
     mx_replace_tilda(line);
-
-    if (size == 0) return;
+    //TODO write error
+    if (size == 0) exit(0);
 }

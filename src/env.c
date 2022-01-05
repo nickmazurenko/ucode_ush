@@ -172,9 +172,12 @@ void set_var_error(char *arg) {
 }
 
 void print_env_error(char wrong_flag) {
+    char *err = mx_strnew(1);
+    err[0] = wrong_flag;
     mx_printerr("env: invalid option -- '");
-    mx_printerr(&wrong_flag);
+    mx_printerr(err);
     mx_printerr("'\nTry 'env --help' for more information.\n");
+    free(err);
 }
 
 void wrong_command_error(char *command) {
