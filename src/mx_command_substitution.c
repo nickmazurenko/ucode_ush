@@ -7,22 +7,22 @@ int check_pipe_commands(char** commands, char **str, char* echo_command, char* e
     for (int command_index = 0; commands[command_index] != NULL; command_index++) {
         char *command = get_exe_command(echo_command);
         FILE *fp;
-        char *strrep = mx_strnew(PATH_MAX);
+        char *replace_value = mx_strnew(PATH_MAX);
         fp = popen(command, "r");
         if (fp == NULL) {
             mx_printerr("Failed to run command\n");
             return 1;
         }
-        char *strrep_ptr = strrep;
-        while (fgets(strrep_ptr, PATH_MAX, fp) != NULL) {
-            strrep_ptr = strrep + mx_strlen(strrep);
-            strrep[mx_strlen(strrep) - 1] = ' ';
+        char *replace_value_ptr = replace_value;
+        while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {
+            replace_value_ptr = replace_value + mx_strlen(replace_value);
+            replace_value[mx_strlen(replace_value) - 1] = ' ';
         }
-        strrep[mx_strlen(strrep) - 1] = '\0';
+        replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
 
-        *str = mx_strrep(*str, echo_command_copy, strrep);
-        free(strrep);
+        *str = mx_strrep(*str, echo_command_copy, replace_value);
+        free(replace_value);
         free(command);
     }
 }
@@ -96,52 +96,52 @@ int handle_dollars(char* data, char** str) {
             dollar = strchr(++dollar, '$');
             continue;
         }
-        char *tmp_ptr = dollar;
+        char *tmp_dollar = dollar;
 
         if (*(dollar + 1) != '(' && *(dollar + 1) != '{') {
             int dollar_len = mx_strlen(dollar) + 2;
             char *replaced_str = mx_strnew(dollar_len);
-            char *str_var = mx_strnew(dollar_len);
+            char *variable_name = mx_strnew(dollar_len);
 
-            replaced_str[0] = *tmp_ptr;
-            tmp_ptr++;
-            for (int i = 1, j = 0; *tmp_ptr != '\0' && *tmp_ptr != ' ' && *tmp_ptr != '$'; i++, j++) {
-                if (*tmp_ptr != '?') {
-                    if (!mx_isalpha(*tmp_ptr))
+            replaced_str[0] = *tmp_dollar;
+            tmp_dollar++;
+            for (int replaced_index = 1, variable_name_index = 0; *tmp_dollar != '\0' && *tmp_dollar != ' ' && *tmp_dollar != '$'; replaced_index++, variable_name_index++) {
+                if (*tmp_dollar != '?') {
+                    if (!mx_isalpha(*tmp_dollar))
                         break;
                 }
-                replaced_str[i + 1] = '\0';
-                str_var[j + 1] = '\0';
+                replaced_str[replaced_index + 1] = '\0';
+                variable_name[variable_name_index + 1] = '\0';
 
-                replaced_str[i] = *tmp_ptr;
-                str_var[j] = *tmp_ptr;
-                if (str_var[0] == '?')
+                replaced_str[replaced_index] = *tmp_dollar;
+                variable_name[variable_name_index] = *tmp_dollar;
+                if (variable_name[0] == '?')
                     break;
-                tmp_ptr++;
+                tmp_dollar++;
             }
 
-            if (str_var[0] == '?') {
+            if (variable_name[0] == '?') {
                 char *status = mx_itoa(t_dirs_to_work.exit_status);
                 *str = rep_substr(*str, replaced_str, status);
                 free(status);
                 free(replaced_str);
-                free(str_var);
+                free(variable_name);
                 dollar = strchr(*str, '$');
                 continue;
             }
 
-            char *env_val = getenv(str_var);
-            char *env = NULL;
-            if (env_val == NULL)
-                env = mx_strdup("\0");
+            char *get_env_value = getenv(variable_name);
+            char *variable_value = NULL;
+            if (get_env_value == NULL)
+                variable_value = mx_strdup("\0");
             else
-                env = mx_strdup(env_val);
+                variable_value = mx_strdup(get_env_value);
 
-            *str = rep_substr(*str, replaced_str, env);
+            *str = rep_substr(*str, replaced_str, variable_value);
 
-            free(env);
+            free(variable_value);
             free(replaced_str);
-            free(str_var);
+            free(variable_name);
         }
 
         dollar = strchr(*str, '$');
@@ -161,49 +161,49 @@ int handle_dollars(char* data, char** str) {
             //mx_printerr("ush: unmatched: }\n");
             break;
         }*/
-        char *tmp_ptr = dollar;
+        char *tmp_dollar = dollar;
         if (*(dollar + 1) == '{') {
-            int ptr_len = mx_strlen(dollar) + 2;
-            char *str_to_replace = mx_strnew(ptr_len);
-            char *str_var = mx_strnew(ptr_len);
+            int dollar_len = mx_strlen(dollar) + 2;
+            char *replaced_str = mx_strnew(dollar_len);
+            char *variable_name = mx_strnew(dollar_len);
 
-            str_to_replace[0] = *tmp_ptr;
-            str_to_replace[1] = *(tmp_ptr + 1);
-            tmp_ptr += 2;
-            for (int i = 2, j = 0; *tmp_ptr != '}'; i++, j++) {
-                str_to_replace[i + 1] = '\0';
-                str_var[j + 1] = '\0';
+            replaced_str[0] = *tmp_dollar;
+            replaced_str[1] = *(tmp_dollar + 1);
+            tmp_dollar += 2;
+            for (int replaced_str_index = 2, variable_name_index = 0; *tmp_dollar != '}'; replaced_str_index++, variable_name_index++) {
+                replaced_str[replaced_str_index + 1] = '\0';
+                variable_name[variable_name_index + 1] = '\0';
 
-                str_to_replace[i] = *tmp_ptr;
-                if (*tmp_ptr != '}')
-                    str_var[j] = *tmp_ptr;
-                if (*tmp_ptr == ' ' || *tmp_ptr == '\0') {
+                replaced_str[replaced_str_index] = *tmp_dollar;
+                if (*tmp_dollar != '}')
+                    variable_name[variable_name_index] = *tmp_dollar;
+                if (*tmp_dollar == ' ' || *tmp_dollar == '\0') {
                     mx_printerr("ush: bad substitution\n");
-                    free(str_to_replace);
-                    free(str_var);
+                    free(replaced_str);
+                    free(variable_name);
                     t_dirs_to_work.exit_status = 1;
                     return -1;
                 }
-                tmp_ptr++;
-                if (*tmp_ptr == '}')
-                    str_to_replace[i + 1] = *tmp_ptr;
+                tmp_dollar++;
+                if (*tmp_dollar == '}')
+                    replaced_str[replaced_str_index + 1] = *tmp_dollar;
             }
 
-            char *env_val = getenv(str_var);
-            char *env = NULL;
-            if (env_val == NULL)
-                env = mx_strdup("\0");
+            char *get_env_value = getenv(variable_name);
+            char *variable_value = NULL;
+            if (get_env_value == NULL)
+                variable_value = mx_strdup("\0");
             else
-                env = mx_strdup(env_val);
+                variable_value = mx_strdup(get_env_value);
 
-            *str = rep_substr(*str, str_to_replace, env);
+            *str = rep_substr(*str, replaced_str, variable_value);
 
-            free(env);
-            free(str_to_replace);
-            free(str_var);
+            free(variable_value);
+            free(replaced_str);
+            free(variable_name);
         }
         dollar = strchr(*str, '$');
-        if (dollar == tmp_ptr)
+        if (dollar == tmp_dollar)
             dollar = strchr(++dollar, '$');
     }
 
@@ -221,64 +221,66 @@ int handle_dollars(char* data, char** str) {
             //mx_printerr("ush: unmatched: )\n");
             break;
         }*/
-        char *tmp_ptr = dollar;
-        int ptr_len = mx_strlen(dollar) + 2;
-        char *str_to_replace = mx_strnew(ptr_len);
-        char *str_var = mx_strnew(ptr_len);
+        char *tmp_dollar = dollar;
+        int dollar_len = mx_strlen(dollar) + 2;
+        char *replaced_str = mx_strnew(dollar_len);
+        char *variable_name = mx_strnew(dollar_len);
 
-        str_to_replace[0] = *tmp_ptr;
-        str_to_replace[1] = *(tmp_ptr + 1);
-        tmp_ptr += 2;
-        for (int i = 2, j = 0; *tmp_ptr != ')'; i++, j++) {
-            str_to_replace[i + 1] = '\0';
-            str_var[j + 1] = '\0';
+        replaced_str[0] = *tmp_dollar;
+        replaced_str[1] = *(tmp_dollar + 1);
+        tmp_dollar += 2;
+        for (int replaced_str_index = 2, variable_name_index = 0; *tmp_dollar != ')'; replaced_str_index++, variable_name_index++) {
+            replaced_str[replaced_str_index + 1] = '\0';
+            variable_name[variable_name_index + 1] = '\0';
 
-            str_to_replace[i] = *tmp_ptr;
-            if (*tmp_ptr != ')')
-                str_var[j] = *tmp_ptr;
-            tmp_ptr++;
-            if (*tmp_ptr == ')')
-                str_to_replace[i + 1] = *tmp_ptr;
+            replaced_str[replaced_str_index] = *tmp_dollar;
+            if (*tmp_dollar != ')')
+                variable_name[variable_name_index] = *tmp_dollar;
+            tmp_dollar++;
+            if (*tmp_dollar == ')')
+                replaced_str[replaced_str_index + 1] = *tmp_dollar;
         }
 
 
-        char *income_command = mx_strnew(mx_strlen(str_var));
-        for (int j = 0; str_var[j] != ' ' && str_var[j] != '\0' && str_var[j] != ')'; j++) {
-            char c = str_var[j];
-            char z = c;
-            if (mx_isalpha(c) && c < 97)
-                c += 32;
-            income_command[j] = z;
-            str_var[j] = c;
+        char *income_command = mx_strnew(mx_strlen(variable_name));
+        for (int variable_name_index = 0; variable_name[variable_name_index] != ' ' && variable_name[variable_name_index] != '\0' && variable_name[variable_name_index] != ')'; variable_name_index++) {
+            char symbol = variable_name[variable_name_index];
+            char symbol_copy = symbol;
+//            if (mx_isalpha(symbol) && symbol < 97)
+//                symbol += 32;
+            symbol = mx_char_to_upper(symbol);
+
+            income_command[variable_name_index] = symbol_copy;
+            variable_name[variable_name_index] = symbol;
         }
-        char *command = get_exe_command(str_var);
+        char *command = get_exe_command(variable_name);
         if (mx_strlen(command) == 0) {
             mx_printerr("ush: command not found: ");
             mx_printerr(income_command);
             mx_printerr("\n");
         }
         FILE *fp;
-        char *strrep = mx_strnew(PATH_MAX);
+        char *replace_value = mx_strnew(PATH_MAX);
         fp = popen(command, "r");
         if (fp == NULL) {
             mx_printerr("Failed to run command\n");
             return 1;
         }
-        char *strrep_ptr = strrep;
-        while (fgets(strrep_ptr, PATH_MAX, fp) != NULL) {
-            strrep_ptr = strrep + mx_strlen(strrep);
-            strrep[mx_strlen(strrep) - 1] = ' ';
+        char *replace_value_ptr = replace_value;
+        while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {
+            replace_value_ptr = replace_value + mx_strlen(replace_value);
+            replace_value[mx_strlen(replace_value) - 1] = ' ';
         }
-        strrep[mx_strlen(strrep) - 1] = '\0';
+        replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
 
-        *str = rep_substr(*str, str_to_replace, strrep);
-        free(strrep);
+        *str = rep_substr(*str, replaced_str, replace_value);
+        free(replace_value);
         free(command);
         free(income_command);
 
-        free(str_to_replace);
-        free(str_var);
+        free(replaced_str);
+        free(variable_name);
         dollar = strrchr(*str, '$');
     }
     return 0;
