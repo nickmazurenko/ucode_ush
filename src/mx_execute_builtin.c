@@ -1,6 +1,7 @@
 #include "ush.h"
 #include "cd.h"
 #include "env.h"
+#include "which.h"
 
 int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i) {
     // EXIT

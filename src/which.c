@@ -1,4 +1,5 @@
 #include "ush.h"
+#include "which.h"
 
 t_which_flags *create_which_flags(void);
 void print_which_error(char wrong_flag);
