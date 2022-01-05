@@ -3,7 +3,6 @@
 void mx_apply_escapes(char ***arr) {
     char **data = *arr;
 
-    // Loop SPACE
     for (int i = 0; data[i] != NULL; i++) {
         int len = mx_strlen(data[i]);
         if (data[i][len - 1] == '\\') {
@@ -20,9 +19,7 @@ void mx_apply_escapes(char ***arr) {
         }
     }
 
-    // Loop for other escapes
     for (int i = 0; data[i] != NULL; i++) {
-        //int len = mx_strlen(data[i]);
 
         char *ptr = mx_strchr(data[i], '\\');
         while ( ptr != NULL ) {
@@ -64,5 +61,4 @@ void mx_apply_escapes(char ***arr) {
         }
 
     }
-    //mx_print_strarr(data, "\n");
 }

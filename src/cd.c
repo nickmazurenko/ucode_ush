@@ -6,6 +6,7 @@ void print_cd_error(char wrong_flag);
 int find_cd_flags(t_cd_flags *data, char **flags);
 int count_dest(char **dest);
 t_cd_flags *create_cd_flags(void);
+void change_to_pwd(void);
 
 // full cd function
 int clear_cd(char **dest, t_cd_flags *flags) {
@@ -29,19 +30,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
     switch (dest_idx) {
 
     case 1:
-        if (t_dirs_to_work.HOME[0] != '\0') {
-
-            chdir(t_dirs_to_work.HOME);
-
-            if (mx_strcmp(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD)) {
-
-                mx_memcpy(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD, PATH_MAX);
-                setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
-            }
-
-            mx_memcpy(t_dirs_to_work.PWD, t_dirs_to_work.HOME, PATH_MAX);
-            setenv("PWD", t_dirs_to_work.PWD, 1);
-        }
+        change_to_pwd();
 
         free(full_path);
         return 0;
@@ -49,18 +38,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
 
     case 2:
         if (dest[1][0] == '-' && mx_strlen(dest[1]) > 1) {
-            if (t_dirs_to_work.HOME[0] != '\0') {
-
-                chdir(t_dirs_to_work.HOME);
-
-                if (mx_strcmp(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD)) {
-                    mx_memcpy(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD, PATH_MAX);
-                    setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
-                }
-
-                mx_memcpy(t_dirs_to_work.PWD, t_dirs_to_work.HOME, PATH_MAX);
-                setenv("PWD", t_dirs_to_work.PWD, 1);
-            }
+            change_to_pwd();
 
             free(full_path);
             return 0;
@@ -314,4 +292,19 @@ static void add_dir(char *dir) {
         t_dirs_to_work.PWD[mx_strlen(t_dirs_to_work.PWD)] = '/';
     mx_memcpy(t_dirs_to_work.PWD + mx_strlen(t_dirs_to_work.PWD), dir, mx_strlen(dir));
 
+}
+
+void change_to_pwd(void) {
+    if (t_dirs_to_work.HOME[0] != '\0') {
+
+        chdir(t_dirs_to_work.HOME);
+
+        if (mx_strcmp(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD)) {
+            mx_memcpy(t_dirs_to_work.OLDPWD, t_dirs_to_work.PWD, PATH_MAX);
+            setenv("OLDPWD", t_dirs_to_work.OLDPWD, 1);
+        }
+
+        mx_memcpy(t_dirs_to_work.PWD, t_dirs_to_work.HOME, PATH_MAX);
+        setenv("PWD", t_dirs_to_work.PWD, 1);
+    }
 }
