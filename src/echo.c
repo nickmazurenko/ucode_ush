@@ -9,7 +9,8 @@ int find_echo_flags(t_echo_flags *echo_flags, char **args);
 int clear_echo(t_echo_flags *echo_flag, char **args) {
     del_extra_spaces(args);
     *args = mx_strtrim(*args);
-    process_echo_args(args);
+    // TODO check if macos works the same
+//    process_echo_args(args);
 
     char **data = mx_strsplit(*args, '>');
     char *ptr = data[0];
@@ -170,7 +171,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 }
             }
         }
-        if(count % 2 == 0 || count == 0) { 
+        if(count % 2 == 0 || count == 0) {
             if (isWrite) {
                 mx_printstr(str);
                 mx_printchar('\n');
@@ -209,9 +210,9 @@ static void process_echo_args(char **args) {
                 *slash_ptr = '\r';
             }
 
+            mx_printerr(str_ptr);
             slash_ptr++;
             *slash_ptr = '\0';
-
             while (*(slash_ptr + 1) != '\0') {
                 mx_swap_char(slash_ptr, slash_ptr + 1);
                 slash_ptr++;
