@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-static void process_echo_args(char **str);
+static void process_echo_args(char **args);
 static void del_extra_spaces(char **str);
 t_echo_flags *create_echo_flags(void);
 int find_echo_flags(t_echo_flags *echo_flags, char **args);
@@ -16,14 +16,14 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
     char *tmp_ptr = ptr;
     while (*tmp_ptr != '\0' && *tmp_ptr != ' ') {
         *tmp_ptr = '\0';
-        for (; *(tmp_ptr + 1) != '\0';) {
+        while (*(tmp_ptr + 1) != '\0') {
             mx_swap_char(tmp_ptr, tmp_ptr + 1);
             tmp_ptr++;
         }
         tmp_ptr = ptr;
     }
     *tmp_ptr = '\0';
-    for (; *(tmp_ptr + 1) != '\0';) {
+    while (*(tmp_ptr + 1) != '\0') {
         mx_swap_char(tmp_ptr, tmp_ptr + 1);
         tmp_ptr++;
     }
@@ -31,7 +31,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
     if (*tmp_ptr == '-') {
         while (*tmp_ptr != '\0' && *tmp_ptr != ' ') {
             *tmp_ptr = '\0';
-            for (; *(tmp_ptr + 1) != '\0';) {
+            while (*(tmp_ptr + 1) != '\0') {
                 mx_swap_char(tmp_ptr, tmp_ptr + 1);
                 tmp_ptr++;
             }
@@ -40,14 +40,14 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
     }
     if (*tmp_ptr == ' ') {
         *tmp_ptr = '\0';
-        for (; *(tmp_ptr + 1) != '\0';) {
+        while ( *(tmp_ptr + 1) != '\0') {
             mx_swap_char(tmp_ptr, tmp_ptr + 1);
             tmp_ptr++;
         }
-        tmp_ptr = ptr;
+//        tmp_ptr = ptr;
     }
 
-    tmp_ptr = ptr;
+//    tmp_ptr = ptr;
 
     if(echo_flag->is_n_flag) {
         bool isWrite = true;
@@ -56,31 +56,30 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         if(data[1] != NULL) {
             FILE *file;
             char *path = mx_strdup(getenv("PWD"));
-            char *newpath = mx_strcat(path, "/");
-            newpath = mx_strcat(newpath, data[1]);
-            file = fopen(newpath, "w");                
+            char *new_path = mx_strcat(path, "/");
+            new_path = mx_strcat(new_path, data[1]);
+            file = fopen(new_path, "w");
             fprintf(file, "%s", ptr);
             fclose(file);
             free(path);
             isWrite = false;
-        }
-        else {
+        } else {
             mx_strcat(str, data[0]);
         }
         int count = 0;
-        bool parants = false;
-        for (int i = 0; str[i]; i++) {
-            if (str[i] == '"' || str[i] == '\'') {
-                for (int j = i; str[j]; j++) {
-                    str[j] = str[j + 1];
+        bool is_par = false;
+        for (int str_idx = 0; str[str_idx]; str_idx++) {
+            if (str[str_idx] == '"' || str[str_idx] == '\'') {
+                for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
+                    str[tmp_idx] = str[tmp_idx + 1];
                 }
                 count++;
-                parants = true;
+                is_par = true;
             }
-            else if (str[i] == '\\') {
-                if (!parants) {
-                    for (int j = i; str[j]; j++) {
-                        str[j] = str[j+1];
+            else if (str[str_idx] == '\\') {
+                if (!is_par) {
+                    for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
+                        str[tmp_idx] = str[tmp_idx + 1];
                     }
                 }
             }
@@ -103,9 +102,9 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         if(data[1] != NULL) {
             FILE *file;
             char *path = mx_strdup(getenv("PWD"));
-            char *newpath = mx_strcat(path, "/");
-            newpath = mx_strcat(newpath, data[1]);
-            file = fopen(newpath, "w");                
+            char *new_path = mx_strcat(path, "/");
+            new_path = mx_strcat(new_path, data[1]);
+            file = fopen(new_path, "w");
             fprintf(file, "%s", ptr);
             fclose(file);
             free(path);
@@ -115,19 +114,19 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             mx_strcat(str, ptr);
         }
         int count = 0;
-        bool parants = false;
-        for (int i = 0; str[i]; i++) {
-            if (str[i] == '"' || str[i] == '\'') {
-                for (int j = i; str[j]; j++) {
-                    str[j] = str[j + 1];
+        bool is_par = false;
+        for (int str_idx = 0; str[str_idx]; str_idx++) {
+            if (str[str_idx] == '"' || str[str_idx] == '\'') {
+                for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
+                    str[tmp_idx] = str[tmp_idx + 1];
                 }
                 count++;
-                parants = true;
+                is_par = true;
             }
-            else if (str[i] == '\\') {
-                if (!parants) {
-                    for (int j = i; str[j]; j++) {
-                        str[j] = str[j+1];
+            else if (str[str_idx] == '\\') {
+                if (!is_par) {
+                    for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
+                        str[tmp_idx] = str[tmp_idx + 1];
                     }
                 }
             }
@@ -151,9 +150,9 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         if(data[1] != NULL) {
             FILE *file;
             char *path = mx_strdup(getenv("PWD"));
-            char *newpath = mx_strcat(path, "/");
-            newpath = mx_strcat(newpath, data[1]);
-            file = fopen(newpath, "w");                
+            char *new_path = mx_strcat(path, "/");
+            new_path = mx_strcat(new_path, data[1]);
+            file = fopen(new_path, "w");
             fprintf(file, "%s", ptr);
             fclose(file);
             free(path);
@@ -163,19 +162,19 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             mx_strcat(str, ptr);
         }
         int count = 0;
-        bool parants = false;
-        for (int i = 0; str[i]; i++) {
-            if (str[i] == '"' || str[i] == '\'') {
-                for (int j = i; str[j]; j++) {
+        bool is_par = false;
+        for (int str_idx = 0; str[str_idx]; str_idx++) {
+            if (str[str_idx] == '"' || str[str_idx] == '\'') {
+                for (int j = str_idx; str[j]; j++) {
                     str[j] = str[j + 1];
                 }
                 count++;
-                parants = true;
+                is_par = true;
             }
-            else if (str[i] == '\\') {
-                if (!parants) {
-                    for (int j = i; str[j]; j++) {
-                        str[j] = str[j+1];
+            else if (str[str_idx] == '\\') {
+                if (!is_par) {
+                    for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
+                        str[tmp_idx] = str[tmp_idx + 1];
                     }
                 }
             }
