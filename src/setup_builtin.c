@@ -77,6 +77,7 @@ int setup_builtin(char *command, char **params, char ***commands_arr, int i) {
         } else {
             t_dirs_to_work.exit_status = 1;
         }
+        free(echo_flag);
         return 0;
 
     } else if (!mx_strcmp("fg", command)) {

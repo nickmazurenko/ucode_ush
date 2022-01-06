@@ -23,10 +23,12 @@ void initialise_dirs(void) {
     jobs = jobs_new_node(getpid(), "ush");
 
     int shlvl = mx_atoi(getenv("SHLVL"));
-    setenv("SHLVL", mx_itoa(shlvl + 1), 1);
+    char *shlvl_ =  mx_itoa(shlvl + 1);
+    setenv("SHLVL", shlvl_, 1);
     char *shell = mx_strjoin(t_dirs_to_work.PWD, "/");
-    shell = mx_strjoin(shell, "ush");
+    shell = mx_strjoin_nleak(shell, "ush");
     setenv("SHELL", shell, 1);
+    free(shlvl_);
     free(shell);
 }
 

@@ -181,8 +181,8 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             mx_del_strarr(&data);
             return 1;
         }
+        free(str);
     }
-
     mx_del_strarr(&data);
     return 0;
 }
@@ -271,7 +271,9 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
 static void del_extra_spaces(char **str) {
     if (strchr(*str, '"') || strchr(*str, '\''))
         return;
+    char *buff = *str;
     *str = mx_del_extra_spaces(*str);
+    free(buff);
 }
 
 t_echo_flags *create_echo_flags(void) {

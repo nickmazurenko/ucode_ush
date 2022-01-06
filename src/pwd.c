@@ -6,7 +6,7 @@ int find_pwd_flags(t_pwd_flags *pwd_flag, char **flags);
 
 
 int clear_pwd(t_pwd_flags *flags) {
-    char *res = (char *)malloc(INT_MAX);
+    char *res = NULL;
 
     if (flags->is_l_flag) {
         res = mx_strdup(t_dirs_to_work.PWD);

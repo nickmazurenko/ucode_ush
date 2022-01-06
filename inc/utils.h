@@ -12,5 +12,6 @@ void str_to_upper_case(char* str);
 char mx_char_to_upper(char symbol);
 int mx_get_substr_index_new(char *str, const char *sub_str);
 int mx_atoi(char *);
+char *mx_strjoin_nleak(char const *s1, char const *s2);
 
 #endif //UTILS_H
