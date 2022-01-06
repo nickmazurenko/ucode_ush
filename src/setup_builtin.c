@@ -81,11 +81,11 @@ int setup_builtin(char *command, char **params, char ***commands_arr, int i) {
         return 0;
 
     } else if (!mx_strcmp("fg", command)) {
-        if (params[1] == NULL)
-            return 0;
+        // if (params[1] == NULL)
+        //     return 0;
         
         t_jobs *node = jobs;
-        while (node != NULL && node->job_id != mx_atoi(params[1])) 
+        while (node->next != NULL) 
             node = node->next;
         
         if (node == NULL) {
