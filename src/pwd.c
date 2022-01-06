@@ -1,9 +1,19 @@
 #include "ush.h"
+#include "utils.h"
 t_pwd_flags *create_pwd_flags(void);
 void print_pwd_error(char wrong_flag);
 int find_pwd_flags(t_pwd_flags *pwd_flag, char **flags);
 
+int get_last_char_index(char *str, char c) {
+    if (str == NULL) return -2;
 
+    for (int i = mx_strlen(str); ; i--) {
+        if (str[i] == c) return i;
+        if (i == 0) break;
+    }
+
+    return -1;
+}
 
 int clear_pwd(t_pwd_flags *flags) {
     char *res = NULL;
@@ -13,6 +23,13 @@ int clear_pwd(t_pwd_flags *flags) {
     }
     else {
         getcwd(res, INT_MAX);
+        if(res == NULL) {
+            char* buff = mx_strnew(PATH_MAX);
+            readlink(getenv("PWD"), buff, PATH_MAX);
+            res = mx_strndup(getenv("PWD"), 1 + get_last_char_index(getenv("PWD"), '/'));
+            res = mx_strjoin_nleak(res, buff);
+            free(buff);
+        }
     }
     
     mx_printstr(res);
