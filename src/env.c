@@ -29,7 +29,6 @@ int clear_env(t_env_flags *env_flag, char **args) {
                 
                 if (args[2] != NULL) {
                     char **path_to_dir = mx_strsplit(t_dirs_to_work.PATH, ':');
-
                     for (int i = 0; path_to_dir[i] != NULL; i++) {
                         int status = 0;
                         char *comm_line = NULL;
@@ -41,6 +40,7 @@ int clear_env(t_env_flags *env_flag, char **args) {
                         }
 
                         status = execve(comm_line, args + 2, environ); //execute command
+                        
                         free(comm_line);
 
                         if (status != -1) {
@@ -48,7 +48,6 @@ int clear_env(t_env_flags *env_flag, char **args) {
                             exit(0);
                         }
                     }
-
                     wrong_command_error(args[2]);
                     mx_del_strarr(&path_to_dir);
                     exit(1);
@@ -71,6 +70,7 @@ int clear_env(t_env_flags *env_flag, char **args) {
                 if (WIFSIGNALED(status)) {
                     t_dirs_to_work.exit_status = 130;
                 }
+
             }
 
             return 0;
