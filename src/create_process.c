@@ -1,6 +1,24 @@
 #include "ush.h"
 
+void remove_double_quotes_from_parameters(char **parameters) {
+    for (int parameter_index = 0; parameters[parameter_index] != NULL; parameter_index++) {
+        int double_quot_index = -1;
+        while ((double_quot_index = mx_get_char_index(parameters[parameter_index], '"')) != -1)
+        {
+            char *buff = parameters[parameter_index];
+            parameters[parameter_index] = replace_substr_new(buff, "\"", "");
+            // mx_printerr("there\n");
+            // free(buff);
+        }
+    }
+}
+
 void create_process(char *command, char **parameters, char *line) {
+    // for (int i = 0; parameters[i] != NULL; i++) {
+    //     mx_printstr(parameters[i]);
+    //     mx_printchar('\n');
+    // }
+    remove_double_quotes_from_parameters(parameters + 1);
     int child_process_id = fork();
     if (child_process_id == 0) {
         if (getenv("PATH") == NULL) {
