@@ -116,7 +116,7 @@ int clear_cd(char **dest, t_cd_flags *flags) {
                 free(full_path);
             free(tilda_path);
             return 1;
-        }
+       }
         if (full_path != NULL)
             free(full_path);
         free(tilda_path);
@@ -220,7 +220,8 @@ static int handle_links(char *path_to_file) {
 
     mx_del_strarr(&links);
 
-    int exit_status = chdir(t_dirs_to_work.PWD);
+    int exit_status = chdir(path_to_file);
+        // printf("there\n %s\n %d \n", t_dirs_to_work.PWD, exit_status);
 
     if (exit_status < 0) {
         mx_printerr("cd: ");
