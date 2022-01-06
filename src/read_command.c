@@ -26,7 +26,5 @@ void read_command(char **line) {
     //TODO write error
     if (size == 0) {
         handle_ctrl_d(SIGKILL);
-        mx_printstr("exit\n");
-        exit(0);
     }
 }

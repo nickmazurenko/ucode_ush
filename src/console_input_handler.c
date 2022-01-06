@@ -1,4 +1,5 @@
 #include "console_input_handler.h"
+#include "stdio.h"
 
 void handle_ctrl_c(int sig) {
     t_jobs *node = jobs;
@@ -17,10 +18,10 @@ void handle_ctrl_c(int sig) {
 
 void handle_ctrl_z(int sig) {
     t_jobs *node = jobs;
-    int job_id = 0;
+    // int job_id = 0;
     while (node->next != NULL) {
-        if (node->job_id > job_id)
-            job_id = node->job_id;
+        // if (node->job_id > job_id)
+        //     job_id = node->job_id;
         node = node->next;
     }
     int pid = node->pid;
@@ -28,10 +29,19 @@ void handle_ctrl_z(int sig) {
     if (pid == jobs->pid)
         return;
 
-    kill(pid, sig);
-    job_id++;
-    node->job_id = job_id;
-    printf("[%d]  Stopped\t\t\t%s\n", job_id, node->cmd);
+    if (mx_strcmp(node->cmd, "cat") == 0) {
+        kill(pid, SIGKILL);
+    } else {
+        kill(pid, sig);
+    }
+
+
+    char new_line = '\n';
+    write(fileno(stdout), &new_line, 1);
+    
+    mx_printstr("ush: suspended ");
+    mx_printstr(node->cmd);
+    mx_printstr("\n");
     return;
 }
 
@@ -45,5 +55,7 @@ void handle_ctrl_d(int sig) {
         kill(current->pid, sig);
     }
     jobs_clear(&jobs);
+    mx_printstr("exit\n");
+    exit(0);
 }
 
