@@ -1,5 +1,6 @@
 #include "ush.h"
 #include "cd.h"
+#include "utils.h"
 
 static int handle_links(char *path_to_file);
 static void change_to_root(void);
@@ -187,7 +188,7 @@ static void change_to_root() {
 static int handle_links(char *path_to_file) {
     char pwd_tmp[PATH_MAX];
     char buff[PATH_MAX];
-    ssize_t bytes_num = 0;
+    long long bytes_num = 0;
 
     mx_memcpy(pwd_tmp, t_dirs_to_work.PWD, PATH_MAX);
 
@@ -199,7 +200,6 @@ static int handle_links(char *path_to_file) {
     memset(buff, 0, PATH_MAX);
 
     char **links = mx_strsplit(path_to_file, '/');
-
     for(int link_idx = 0; links[link_idx] != NULL; link_idx++) {
         if(mx_strcmp(links[link_idx], "..") == 0) {
             change_to_root();
@@ -207,8 +207,10 @@ static int handle_links(char *path_to_file) {
             add_dir(links[link_idx]);
         }
         bytes_num = readlink(t_dirs_to_work.PWD, buff, PATH_MAX);
-
-        if (bytes_num > 0 && mx_strcmp(links[link_idx], "..") && mx_strcmp(links[link_idx], ".")) {
+        struct stat side_inf;
+        lstat(path_to_file, &side_inf);
+        // free(link);
+        if ((side_inf.st_mode & S_IFMT) == S_IFLNK && mx_strcmp(links[link_idx], "..") && mx_strcmp(links[link_idx], ".")) {
             mx_del_strarr(&links);
             mx_memcpy(t_dirs_to_work.PWD, pwd_tmp, PATH_MAX);
             return 1;

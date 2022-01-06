@@ -23,5 +23,8 @@ void read_command(char **line) {
 
     mx_replace_tilda(line);
     //TODO write error
-    if (size == 0) exit(0);
+    if (size == 0) { 
+        mx_printstr("exit\n");
+        exit(0);
+    }
 }
