@@ -25,6 +25,7 @@ int check_pipe_commands(char** commands, char **str, char* echo_command, char* e
         free(replace_value);
         free(command);
     }
+    return 0;
 }
 
 int handle_back_quotes(char* data, char** str) {
@@ -32,7 +33,7 @@ int handle_back_quotes(char* data, char** str) {
 
     if (back_quot) {
         int back_quotes_number = mx_count_substr_new(back_quot, "`");
-        if (mx_count_substr_new(back_quot, "`") % 2 != 0) {
+        if (back_quotes_number % 2 != 0) {
             //mx_printerr("ush: unmatched: `\n");
             return 0;
         }

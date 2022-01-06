@@ -3,6 +3,8 @@
 #include "env.h"
 #include "which.h"
 #include "echo.h"
+#include "utils.h"
+
 
 int setup_builtin(char *command, char **params, char ***commands_arr, int i) {
     // EXIT

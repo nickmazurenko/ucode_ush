@@ -2,7 +2,7 @@
 
 void read_command(char **line) {
     *line = mx_strnew(0);
-    int size = 0;
+    size_t size = 0;
 
     getline(line, &size, stdin);
     size = mx_strlen(*line);

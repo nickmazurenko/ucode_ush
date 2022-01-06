@@ -22,6 +22,7 @@ int execute_commands(char** commands_arr) {
         mx_del_strarr(&parameters);
 
     }
+    return 0;
 }
 
 int loop() {

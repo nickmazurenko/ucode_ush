@@ -1,7 +1,7 @@
 #include "ush.h"
 #include "echo.h"
 
-static void process_echo_args(char **args);
+// static void process_echo_args(char **args);
 static void del_extra_spaces(char **str);
 t_echo_flags *create_echo_flags(void);
 int find_echo_flags(t_echo_flags *echo_flags, char **args);
@@ -187,85 +187,85 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
     return 0;
 }
 
-static void process_echo_args(char **args) {
-    char *str_ptr = mx_strchr(*args, '"');
-    if (str_ptr != NULL) {
-        char *slash_ptr = mx_strchr(str_ptr, '\\');
-        while ( slash_ptr != NULL ) {
-            if (*(slash_ptr + 1) == 'n') {
-                *slash_ptr = '\n';
-            } else if (*(slash_ptr + 1) == 't') {
-                *slash_ptr = '\t';
-            } else if (*(slash_ptr + 1) == '\\') {
-                *slash_ptr = '\\';
-            } else if (*(slash_ptr + 1) == 'a') {
-                *slash_ptr = '\a';
-            } else if (*(slash_ptr + 1) == 'v') {
-                *slash_ptr = '\v';
-            } else if (*(slash_ptr + 1) == 'b') {
-                *slash_ptr = '\b';
-            } else if (*(slash_ptr + 1) == 'f') {
-                *slash_ptr = '\f';
-            } else if (*(slash_ptr + 1) == 'r') {
-                *slash_ptr = '\r';
-            }
+// static void process_echo_args(char **args) {
+//     char *str_ptr = mx_strchr(*args, '"');
+//     if (str_ptr != NULL) {
+//         char *slash_ptr = mx_strchr(str_ptr, '\\');
+//         while ( slash_ptr != NULL ) {
+//             if (*(slash_ptr + 1) == 'n') {
+//                 *slash_ptr = '\n';
+//             } else if (*(slash_ptr + 1) == 't') {
+//                 *slash_ptr = '\t';
+//             } else if (*(slash_ptr + 1) == '\\') {
+//                 *slash_ptr = '\\';
+//             } else if (*(slash_ptr + 1) == 'a') {
+//                 *slash_ptr = '\a';
+//             } else if (*(slash_ptr + 1) == 'v') {
+//                 *slash_ptr = '\v';
+//             } else if (*(slash_ptr + 1) == 'b') {
+//                 *slash_ptr = '\b';
+//             } else if (*(slash_ptr + 1) == 'f') {
+//                 *slash_ptr = '\f';
+//             } else if (*(slash_ptr + 1) == 'r') {
+//                 *slash_ptr = '\r';
+//             }
 
-            mx_printerr(str_ptr);
-            slash_ptr++;
-            *slash_ptr = '\0';
-            while (*(slash_ptr + 1) != '\0') {
-                mx_swap_char(slash_ptr, slash_ptr + 1);
-                slash_ptr++;
-            }
+//             mx_printerr(str_ptr);
+//             slash_ptr++;
+//             *slash_ptr = '\0';
+//             while (*(slash_ptr + 1) != '\0') {
+//                 mx_swap_char(slash_ptr, slash_ptr + 1);
+//                 slash_ptr++;
+//             }
 
-            slash_ptr = str_ptr + 1;
+//             slash_ptr = str_ptr + 1;
 
-            if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '"')
-                || mx_get_char_index(slash_ptr, '\\') == -1) {
-                str_ptr = mx_strchr(slash_ptr, '\'');
-                break;
-            }
-            slash_ptr = mx_strchr(str_ptr, '\\');
-        }
-    } else {
-        str_ptr = mx_strchr(*args, '\'');
-    }
+//             if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '"')
+//                 || mx_get_char_index(slash_ptr, '\\') == -1) {
+//                 str_ptr = mx_strchr(slash_ptr, '\'');
+//                 break;
+//             }
+//             slash_ptr = mx_strchr(str_ptr, '\\');
+//         }
+//     } else {
+//         str_ptr = mx_strchr(*args, '\'');
+//     }
 
-    if (str_ptr != NULL) {
-        char *slash_ptr = mx_strchr(str_ptr, '\\');
-        while ( slash_ptr != NULL ) {
-            if (*(slash_ptr + 1) == 'n') {
-                *slash_ptr = '\n';
-            } else if (*(slash_ptr + 1) == 't') {
-                *slash_ptr = '\t';
-            } else if (*(slash_ptr + 1) == '\\') {
-                *slash_ptr = '\\';
-            } else if (*(slash_ptr + 1) == 'a') {
-                *slash_ptr = '\a';
-            } else if (*(slash_ptr + 1) == 'v') {
-                *slash_ptr = '\v';
-            } else if (*(slash_ptr + 1) == 'b') {
-                *slash_ptr = '\b';
-            } else if (*(slash_ptr + 1) == 'f') {
-                *slash_ptr = '\f';
-            } else if (*(slash_ptr + 1) == 'r') {
-                *slash_ptr = '\r';
-            }
+//     if (str_ptr != NULL) {
+//         char *slash_ptr = mx_strchr(str_ptr, '\\');
+//         while ( slash_ptr != NULL ) {
+//             if (*(slash_ptr + 1) == 'n') {
+//                 *slash_ptr = '\n';
+//             } else if (*(slash_ptr + 1) == 't') {
+//                 *slash_ptr = '\t';
+//             } else if (*(slash_ptr + 1) == '\\') {
+//                 *slash_ptr = '\\';
+//             } else if (*(slash_ptr + 1) == 'a') {
+//                 *slash_ptr = '\a';
+//             } else if (*(slash_ptr + 1) == 'v') {
+//                 *slash_ptr = '\v';
+//             } else if (*(slash_ptr + 1) == 'b') {
+//                 *slash_ptr = '\b';
+//             } else if (*(slash_ptr + 1) == 'f') {
+//                 *slash_ptr = '\f';
+//             } else if (*(slash_ptr + 1) == 'r') {
+//                 *slash_ptr = '\r';
+//             }
 
-            slash_ptr++;
-            *slash_ptr = '\0';
-            while (*(slash_ptr + 1) != '\0') {
-                mx_swap_char(slash_ptr, slash_ptr + 1);
-                slash_ptr++;
-            }
+//             slash_ptr++;
+//             *slash_ptr = '\0';
+//             while (*(slash_ptr + 1) != '\0') {
+//                 mx_swap_char(slash_ptr, slash_ptr + 1);
+//                 slash_ptr++;
+//             }
 
-            if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '\'')
-                || mx_get_char_index(slash_ptr, '\\') == -1)
-                break;
-            slash_ptr = mx_strchr(str_ptr, '\\');
-        }
-    }
-}
+//             if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '\'')
+//                 || mx_get_char_index(slash_ptr, '\\') == -1)
+//                 break;
+//             slash_ptr = mx_strchr(str_ptr, '\\');
+//         }
+//     }
+// }
 
 // TODO: change mx_delete_extra_spaces on mx_del_extra_spaces
 static void del_extra_spaces(char **str) {

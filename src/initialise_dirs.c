@@ -1,4 +1,5 @@
 #include "ush.h"
+#include "utils.h"
 
 void initialise_dirs(void) {
     t_dirs_to_work.PWD = mx_strnew(PATH_MAX);
