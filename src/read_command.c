@@ -1,4 +1,5 @@
 #include "ush.h"
+#include "console_input_handler.h"
 
 void read_command(char **line) {
     *line = mx_strnew(0);
@@ -23,7 +24,8 @@ void read_command(char **line) {
 
     mx_replace_tilda(line);
     //TODO write error
-    if (size == 0) { 
+    if (size == 0) {
+        handle_ctrl_d(SIGKILL);
         mx_printstr("exit\n");
         exit(0);
     }

@@ -5,5 +5,6 @@
 
 void handle_ctrl_c(int sig);
 void handle_ctrl_z(int sig);
+void handle_ctrl_d(int sig);
 
 #endif //UCODE_USH_CONSOLE_INPUT_HANDLER_H

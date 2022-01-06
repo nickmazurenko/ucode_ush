@@ -35,3 +35,15 @@ void handle_ctrl_z(int sig) {
     return;
 }
 
+void handle_ctrl_d(int sig) {
+    t_jobs *node = jobs;
+    node = node->next;
+    while (node != NULL)
+    {
+        t_jobs* current = node;
+        node = node->next;
+        kill(current->pid, sig);
+    }
+    jobs_clear(&jobs);
+}
+
