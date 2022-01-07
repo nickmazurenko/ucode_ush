@@ -96,21 +96,26 @@ int clear_which(t_which_flags *which_flag, char **args) {
             int built = 0;
             for (int command_idx = 0; command_idx < 8; command_idx++) {
                 if (!mx_strcmp(commands[command_idx], args[args_idx])) {
-                    mx_printerr(args[args_idx]);
-                    mx_printerr(": shell built-in command\n");
+                    if(!which_flag->is_s_flag) {
+                        mx_printerr(args[args_idx]);
+                        mx_printerr(": shell built-in command\n");
+                    }
                     is_present = true;
                     built = 1;
                     args_idx++;
                     break;
                 }
             }
+
             if (built) {
                 built = 0;
                 is_present = false;
                 continue;
             }
             if (!mx_strcmp(args[args_idx], "export")) {
-                mx_printerr("export: ush reserved word\n");
+                if(!which_flag->is_s_flag) {
+                    mx_printerr("export: ush reserved word\n");
+                }
                 is_present = true;
                 args_idx++;
                 continue;
@@ -119,21 +124,24 @@ int clear_which(t_which_flags *which_flag, char **args) {
             if (args[args_idx][0] == '/') {
                 lstat(args[args_idx], &side_info);
                 if (side_info.st_mode & S_IXUSR) {
-                    mx_printstr(args[args_idx]);
-                    mx_printchar('\n');
+                    if(!which_flag->is_s_flag) {
+                        mx_printstr(args[args_idx]);
+                        mx_printchar('\n');
+                    }
                     args_idx++;
                     is_present = true;
                     continue;
                 } else {
-                    mx_printerr(args[args_idx]);
-                    mx_printerr(" not found\n");
+                    if(!which_flag->is_s_flag) {
+                        mx_printerr(args[args_idx]);
+                        mx_printerr(" not found\n");
+                    }
                     args_idx++;
                     is_present = true;
                     is_here = false;
                     continue;
                 }
             }
-
             for (int path_idx = 0; path_to_dir[path_idx] != NULL; path_idx++) {
                 d = opendir(path_to_dir[path_idx]);
                 if (d != NULL) {
@@ -143,7 +151,8 @@ int clear_which(t_which_flags *which_flag, char **args) {
                             mx_strcpy(name, path_to_dir[path_idx]);
                             name = mx_strcat(name, "/");
                             name = mx_strcat(name, args[args_idx]);
-                            mx_printstr(name);
+                            if(!which_flag->is_s_flag)
+                                mx_printstr(name);
                             mx_printchar('\n');
                             free(name);
                             is_present = true;
@@ -156,8 +165,10 @@ int clear_which(t_which_flags *which_flag, char **args) {
 
             if (is_present == false) {
                 is_here = false;
-                mx_printerr(args[args_idx]);
-                mx_printerr(" not found\n");
+                if(!which_flag->is_s_flag) {
+                    mx_printerr(args[args_idx]);
+                    mx_printerr(" not found\n");
+                }
             }
             is_present = false;
             args_idx++;

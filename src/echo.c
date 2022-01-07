@@ -37,7 +37,7 @@ void process_echo_args(char **args, int idx, t_echo_flags *echo_flag) {
     char *tmp = replace_back_slash(args[idx], echo_flag);
     
     char *sequenses[] = {"\\a","\\b","\\f","\\n","\\r","\\t","\\v", NULL};
-    char *escape[] = {"\a","\b","\f","\n","\r","\t","\v", NULL};
+    char *escape[] =    {"\a", "\b", "\f", "\n", "\r", "\t", "\v", NULL};
 
     free(args[idx]);
     args[idx] = mx_strdup(tmp);
@@ -45,6 +45,7 @@ void process_echo_args(char **args, int idx, t_echo_flags *echo_flag) {
     for (int j = 0; sequenses[j] != NULL; j++) {
         if (strstr(args[idx],sequenses[j])) {
             tmp = mx_replace_substr_new(args[idx],sequenses[j], escape[j]);
+            // printf("\ntmp %s\n", tmp);
             free(args[idx]);
             args[idx] = mx_strdup(tmp);
             free(tmp);
