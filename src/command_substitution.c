@@ -147,7 +147,7 @@ int handle_dollars(char* data, char** str) {
 
         dollar = strchr(*str, '$');
     }
-
+ 
     dollar = strchr(*str, '$');
     if (!dollar)
         return 0;
@@ -269,18 +269,20 @@ int handle_dollars(char* data, char** str) {
             return 1;
         }
         char *replace_value_ptr = replace_value;
-        while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {
+        while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {            
             replace_value_ptr = replace_value + mx_strlen(replace_value);
-            replace_value[mx_strlen(replace_value) - 1] = ' ';
-        }
+            replace_value[mx_strlen(replace_value)] = ' ';
+        }  
         replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
+        *str = mx_replace_substr_new(*str, replaced_str, replace_value);
+        // TODO
+        // printf("%s\n", replaced_str);
 
-        *str = replace_substr_new(*str, replaced_str, replace_value);
         free(replace_value);
         free(command);
         free(income_command);
-
+        
         free(replaced_str);
         free(variable_name);
         dollar = strrchr(*str, '$');
@@ -292,12 +294,12 @@ int handle_dollars(char* data, char** str) {
 
 int mx_command_substitution(char **str) {
     char *data = *str;
-
     int result = handle_back_quotes(data, str);
 
     if (result) return result;
 
     result = handle_dollars(data, str);
+
     if (result) return result;
 
     return 0;
