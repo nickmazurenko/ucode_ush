@@ -91,6 +91,7 @@ int handle_dollars(char* data, char** str) {
     if (!dollar)
         return 0;
 
+
     // Loop for replacing simple $COMMAND
     while (dollar != NULL) {
         if (*(dollar + 1) == '{' || *(dollar + 1) == '(') {
@@ -100,6 +101,13 @@ int handle_dollars(char* data, char** str) {
         char *tmp_dollar = dollar;
 
         if (*(dollar + 1) != '(' && *(dollar + 1) != '{') {
+
+            // if (*(dollar + 1) != '?' && !mx_isalpha(*dollar + 1)) {
+            //     dollar = dollar + 1;
+            //     dollar = strchr(dollar, '$');
+            //     continue;
+            // }
+
             int dollar_len = mx_strlen(dollar) + 2;
             char *replaced_str = mx_strnew(dollar_len);
             char *variable_name = mx_strnew(dollar_len);
@@ -138,16 +146,17 @@ int handle_dollars(char* data, char** str) {
             else
                 variable_value = mx_strdup(get_env_value);
 
-            *str = replace_substr_new(*str, replaced_str, variable_value);
+            if (mx_isalpha(variable_name[0]))
+                *str = replace_substr_new(*str, replaced_str, variable_value);
 
             free(variable_value);
             free(replaced_str);
             free(variable_name);
         }
 
-        dollar = strchr(*str, '$');
+        dollar = strchr(++dollar, '$');
     }
- 
+
     dollar = strchr(*str, '$');
     if (!dollar)
         return 0;
@@ -270,20 +279,18 @@ int handle_dollars(char* data, char** str) {
             return 1;
         }
         char *replace_value_ptr = replace_value;
-        while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {            
+        while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {
             replace_value_ptr = replace_value + mx_strlen(replace_value);
-            replace_value[mx_strlen(replace_value)] = ' ';
-        }  
+            replace_value[mx_strlen(replace_value) - 1] = ' ';
+        }
         replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
-        *str = mx_replace_substr_new(*str, replaced_str, replace_value);
-        // TODO
-        // printf("%s\n", replaced_str);
 
+        *str = replace_substr_new(*str, replaced_str, replace_value);
         free(replace_value);
         free(command);
         free(income_command);
-        
+
         free(replaced_str);
         free(variable_name);
         dollar = strrchr(*str, '$');
@@ -295,12 +302,12 @@ int handle_dollars(char* data, char** str) {
 
 int mx_command_substitution(char **str) {
     char *data = *str;
+
     int result = handle_back_quotes(data, str);
 
     if (result) return result;
 
     result = handle_dollars(data, str);
-
     if (result) return result;
 
     return 0;

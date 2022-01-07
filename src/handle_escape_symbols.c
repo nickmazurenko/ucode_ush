@@ -18,37 +18,51 @@ void handle_escape_symbols(char ***arr) {
                 data[j + 1] = tmp;
             }
             i--;
+            mx_printerr("there\n");
         }
     }
     for (int i = 0; data[i] != NULL; i++) {
         char *ptr = mx_strchr(data[i], '\\');
+        int is_changed = 0;
+
         while ( ptr != NULL ) {
             if (*(ptr + 1) == 'n') {
                 *ptr = '\n';
+                is_changed = 1;
             } else if (*(ptr + 1) == 't') {
                 *ptr = '\t';
+                is_changed = 1;
             } else if (*(ptr + 1) == '\\') {
                 *ptr = '\\';
+                is_changed = 1;
             } else if (*(ptr + 1) == '\'') {
                 *ptr = '\'';
-            } else if (*(ptr + 1) == '"') {
+                is_changed = 1;
+            } else if (*(ptr + 1) == '\"') {
                 *ptr = '\"';
+                is_changed = 1;
             } else if (*(ptr + 1) == '`') {
                 *ptr = '`';
+                is_changed = 1;
             } else if (*(ptr + 1) == 'a') {
                 *ptr = '\a';
+                is_changed = 1;
             } else if (*(ptr + 1) == '0') {
                 *ptr = '\0';
+                is_changed = 1;
             }
             
             ptr++;
             char *from_ptr = ptr;
-            *ptr = '\0';
-            
-            for (;*(ptr + 1) != '\0';) {
-                mx_swap_char(ptr, ptr + 1);
-                ptr++;
+            if (is_changed) {
+                *ptr = '\0';
+                for (;*(ptr + 1) != '\0';) {
+                    mx_swap_char(ptr, ptr + 1);
+                    ptr++;
+                }
             }
+            
+            is_changed = 0;
             ptr = mx_strchr(from_ptr, '\\');
         }
     }

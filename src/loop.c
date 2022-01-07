@@ -1,16 +1,28 @@
 #include "loop.h"
+#include "utils.h"
 
 int execute_commands(char** commands_arr) {
 
     char **parameters = NULL;
     char * command = NULL;
 
-    for (int i = 0; commands_arr[i] != NULL; ++i) {
+    // for (int command_index = 0; commands_arr[command_index] != NULL; command_index++) {
+    // }
 
+    for (int i = 0; commands_arr[i] != NULL; ++i) {
         if (mx_command_substitution(&commands_arr[i]) == -1) // TODO: как работает замена?
             continue;
         parameters = mx_strsplit(commands_arr[i], ' ');
+
+        for (int parameter_index = 0; parameters[parameter_index] != NULL; parameter_index++) {
+            delete_one_streak_back_slash(&parameters[parameter_index]);
+        }
+
         command = mx_strdup(parameters[0]);
+        
+        // mx_printstr("parameters: \n");
+        // mx_print_strarr(commands_arr, "\n");
+        // mx_printstr("parameters end\n");
 
         if (setup_builtin(command, parameters, &commands_arr, i)) {
             handle_escape_symbols(&parameters);

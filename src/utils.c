@@ -1,6 +1,44 @@
 #include "ush.h"
 #include "utils.h"
 
+// TODO: как определить что нужно удалять back slash
+
+bool mx_is_screenable(char c) {
+    char screenable[] = {'a', 'b', 'f', 'n', 'r', 't', 'v', '"', '\'', '`', '\\'};
+    int screenable_number = 11;
+
+    for (int screenable_index = 0; screenable_index < screenable_number; screenable_index++) {
+        if (c == screenable[screenable_index]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void delete_one_streak_back_slash(char **str) {
+    char *back_slash = mx_strchr(*str, '\\');
+
+    while (back_slash != NULL)
+    {
+        if (!mx_is_screenable(*(back_slash + 1)) && *(back_slash + 1) != '\0') {
+            *back_slash = '\0';
+            char *buff = back_slash;
+            while (*(buff + 1) != '\0')
+            {
+                mx_swap_char(buff, buff + 1);
+                buff++;
+            }
+            
+        } else {
+            back_slash++;
+        }
+        back_slash = mx_strchr(back_slash, '\\');
+    }
+    
+}
+
+
 int mx_get_substr_index_new(char *str, const char *sub_str) {
     if (str == NULL) return  -1;
 

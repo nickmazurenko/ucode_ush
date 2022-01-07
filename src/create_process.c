@@ -2,7 +2,12 @@
 #include "utils.h"
 
 void remove_double_quotes_from_parameters(char **parameters) {
+
     for (int parameter_index = 0; parameters[parameter_index] != NULL; parameter_index++) {
+        int double_quotes_number = mx_count_substr_new(parameters[parameter_index], "\"");
+        
+        if (double_quotes_number % 2 != 0) continue;
+
         int double_quot_index = -1;
         while ((double_quot_index = mx_get_char_index(parameters[parameter_index], '"')) != -1)
         {

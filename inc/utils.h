@@ -17,4 +17,6 @@ void delete_back_slash(char *str, int back_slash_idx);
 void delete_back_slashes(char *str);
 void screen_back_slashes(char **str);
 
+void delete_one_streak_back_slash(char **str);
+
 #endif //UTILS_H
