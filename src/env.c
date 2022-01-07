@@ -46,12 +46,12 @@ int clear_env(t_env_flags *env_flag, char **args) {
 
                         if (status != -1) {
                             mx_del_strarr(&path_to_dir);
-                            exit(0);
+                            exit(1);
                         }
                     }
                     wrong_command_error(args[2]);
                     mx_del_strarr(&path_to_dir);
-                    exit(1);
+                    exit(0);
                 }
                 exit(0);
             }
