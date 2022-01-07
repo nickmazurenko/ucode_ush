@@ -21,7 +21,6 @@ void handle_escape_symbols(char ***arr) {
         }
     }
     for (int i = 0; data[i] != NULL; i++) {
-        mx_printerr("there\n");
         char *ptr = mx_strchr(data[i], '\\');
         while ( ptr != NULL ) {
             if (*(ptr + 1) == 'n') {
@@ -43,13 +42,14 @@ void handle_escape_symbols(char ***arr) {
             }
             
             ptr++;
+            char *from_ptr = ptr;
             *ptr = '\0';
-            for (;ptr != '\0';) {
+            
+            for (;*(ptr + 1) != '\0';) {
                 mx_swap_char(ptr, ptr + 1);
-                if (*(ptr + 1) != '\0') ptr++;
+                ptr++;
             }
-
-            ptr = mx_strchr(data[i], '\\');
+            ptr = mx_strchr(from_ptr, '\\');
         }
     }
 }
