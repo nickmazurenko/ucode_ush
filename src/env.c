@@ -183,7 +183,8 @@ void print_env_error(char wrong_flag) {
 
 void wrong_command_error(char *command) {
     mx_printerr("ush: command not found: ");
-    // delete_back_slashes(command);
+    delete_back_slashes(command);
+    screen_back_slashes(&command);
     mx_printerr(command);
     mx_printerr("\n");
 }
