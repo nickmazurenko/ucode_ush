@@ -15,4 +15,6 @@ int mx_atoi(char *);
 char *mx_strjoin_nleak(char const *s1, char const *s2);
 void delete_back_slash(char *str, int back_slash_idx);
 void delete_back_slashes(char *str);
+void screen_back_slashes(char **str);
+
 #endif //UTILS_H
