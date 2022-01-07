@@ -191,7 +191,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             return 1;
         }
     } else {
-        printf("ptr %s\n", ptr);
+        // printf("ptr %s\n", ptr);
         bool isWrite = true;
         char *str = NULL;
         str = mx_strnew(PATH_MAX);
