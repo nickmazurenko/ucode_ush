@@ -27,7 +27,7 @@ int clear_env(t_env_flags *env_flag, char **args) {
             int pid = fork();
             if (pid == 0) {
                 environ = NULL;
-                
+
                 if (args[2] != NULL) {
                     char **path_to_dir = mx_strsplit(t_dirs_to_work.PATH, ':');
                     for (int i = 0; path_to_dir[i] != NULL; i++) {
@@ -39,42 +39,38 @@ int clear_env(t_env_flags *env_flag, char **args) {
                         } else {
                             comm_line = mx_strdup(args[2]);
                         }
-
+                        errno = 1;
                         status = execve(comm_line, args + 2, environ); //execute command
-                        
-                        free(comm_line);
-
+                       
                         if (status != -1) {
                             mx_del_strarr(&path_to_dir);
-                            exit(1);
+                            exit(EXIT_FAILURE);
                         }
                     }
                     wrong_command_error(args[2]);
                     mx_del_strarr(&path_to_dir);
-                    exit(0);
+                    exit(1);                    
                 }
                 exit(0);
-            }
-            else {
+            } else {
                 t_jobs *new_command = jobs_new_node(pid, args[3]);
                 jobs_push_back(&jobs, &new_command);
                 int status = 0;
                 waitpid(pid, &status, WUNTRACED);
+                
                 t_dirs_to_work.exit_status = WEXITSTATUS(status);
-
                 if (!WIFSTOPPED(status)) {
                     jobs_remove(&jobs, pid);
-                } else {
-                    t_dirs_to_work.exit_status = 147;
-                }
+                } 
+                // else {
+                //     t_dirs_to_work.exit_status = 147;
+                // }
 
-                if (WIFSIGNALED(status)) {
-                    t_dirs_to_work.exit_status = 130;
-                }
-
+                // if (WIFSIGNALED(status)) {
+                //     t_dirs_to_work.exit_status = 130;
+                // }
             }
-
-            return 0;
+            return t_dirs_to_work.exit_status;
         } else if (env_flag->is_u_flag) {
 
             if (args[2] != NULL) {
