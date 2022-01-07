@@ -258,6 +258,7 @@ int handle_dollars(char* data, char** str) {
         if (mx_strlen(command) == 0) {
             mx_printerr("ush: command not found: ");
             delete_back_slashes(income_command);
+            screen_back_slashes(&income_command);
             mx_printerr(income_command);
             mx_printerr("\n");
         }
