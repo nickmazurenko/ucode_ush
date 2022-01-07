@@ -116,8 +116,31 @@ void delete_back_slash(char *str, int back_slash_idx) {
 
 void delete_back_slashes(char *str) {
 
-    int back_slash_idx = 0; 
-    while ((back_slash_idx = mx_get_char_index(str, '\\')) != -1) {
+    // mx_printstr(str);
+    int back_slash_idx = 0;
+
+    int slashes_number = mx_count_substr_new(str, "\\");
+    while (slashes_number % 2 != 0 && (back_slash_idx = mx_get_char_index(str, '\\')) != -1) {
         delete_back_slash(str, back_slash_idx);
+        slashes_number--;
+    }
+
+    
+}
+
+void screen_back_slashes(char **str) {
+    int back_slash_index = 0;
+
+    int shift = 0;
+
+    while ((back_slash_index = mx_get_char_index(*str + shift, '\\')) != -1)
+    {   
+        int str_len = mx_strlen(*str);
+        if (shift + back_slash_index < str_len - 1) {
+            if ((*str)[shift + back_slash_index + 1] == '\\') {
+                *str = replace_substr_new(*str, "\\", "");
+            }
+        }
+        shift += back_slash_index + 1;
     }
 }

@@ -83,13 +83,18 @@ int setup_builtin(char *command, char **params, char ***commands_arr, int i) {
     } else if (!mx_strcmp("fg", command)) {
         // if (params[1] == NULL)
         //     return 0;
-        
         t_jobs *node = jobs;
         while (node->next != NULL) 
             node = node->next;
         
         if (node == NULL) {
             mx_printerr("ush: fg: no such job\n");
+            t_dirs_to_work.exit_status = 1;
+            return 0;
+        }
+
+        if (node->pid == jobs->pid) {
+            mx_printerr("ush: fg: no current jobs\n");
             t_dirs_to_work.exit_status = 1;
             return 0;
         }
@@ -128,6 +133,5 @@ int setup_builtin(char *command, char **params, char ***commands_arr, int i) {
         t_dirs_to_work.exit_status = 0;
         return 0;
     }
-
     return -1;
 }
