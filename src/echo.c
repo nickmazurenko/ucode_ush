@@ -1,17 +1,69 @@
 #include "ush.h"
 #include "echo.h"
+#include "utils.h"
 
 // static void process_echo_args(char **args);
 static void del_extra_spaces(char **str);
 t_echo_flags *create_echo_flags(void);
 int find_echo_flags(t_echo_flags *echo_flags, char **args);
 
+static char *replace_back_slash(char *str, t_echo_flags *echo_flag) {
+    char *res = (char *)malloc(mx_strlen(str) + 1);
+    int len = 0;
+
+    for (int i = 0; i <= mx_strlen(str); i++) {
+        if (str[i] == '\\' && str[i + 1] == '\\')
+            i++;
+        
+        if (str[i] == '\\' && str[i + 1] == 'e') {
+            if (str[i + 2] != '\\')
+                i += 3;
+            else
+                i += 2;
+        }
+        
+        if (str[i] == '\\' && str[i + 1] == 'c') {
+            echo_flag->is_n_flag = true;
+            break;
+        }
+        res[len] = str[i];
+        len++;
+    }
+    res[len] = '\0';
+    return res;
+}
+
+void process_echo_args(char **args, int idx, t_echo_flags *echo_flag) {
+    char *tmp = replace_back_slash(args[idx], echo_flag);
+    
+    char *sequenses[] = {"\\a","\\b","\\f","\\n","\\r","\\t","\\v", NULL};
+    char *escape[] = {"\a","\b","\f","\n","\r","\t","\v", NULL};
+
+    free(args[idx]);
+    args[idx] = mx_strdup(tmp);
+    free(tmp);
+    for (int j = 0; sequenses[j] != NULL; j++) {
+        if (strstr(args[idx],sequenses[j])) {
+            tmp = mx_replace_substr_new(args[idx],sequenses[j], escape[j]);
+            free(args[idx]);
+            args[idx] = mx_strdup(tmp);
+            free(tmp);
+        }
+    }
+}
+
+
+
 
 int clear_echo(t_echo_flags *echo_flag, char **args) {
     del_extra_spaces(args);
     *args = mx_strtrim(*args);
+    if (!echo_flag->is_E_flag && strstr(args[0], "\\") && mx_get_char_index(args[0], '\"') != -1) 
+        process_echo_args(args, 0, echo_flag);
+    
+    if (echo_flag->is_E_flag)
+        args[0] = replace_back_slash(args[0], echo_flag);
     // TODO check if macos works the same
-
     char **data = mx_strsplit(*args, '>');
     char *ptr = data[0];
     char *tmp_ptr = ptr;
@@ -29,7 +81,8 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         tmp_ptr++;
     }
     tmp_ptr = ptr;
-    if (*tmp_ptr == '-') {
+    //TODO
+    if (*tmp_ptr == '-' && !echo_flag->is_no_flag) {
         while (*tmp_ptr != '\0' && *tmp_ptr != ' ') {
             *tmp_ptr = '\0';
             while (*(tmp_ptr + 1) != '\0') {
@@ -47,9 +100,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         }
 //        tmp_ptr = ptr;
     }
-
 //    tmp_ptr = ptr;
-
     if(echo_flag->is_n_flag) {
         bool isWrite = true;
         char *str = NULL;
@@ -87,6 +138,8 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         if(count % 2 == 0 || count == 0) {
             if(isWrite) {
                 mx_printstr(str);
+                if(echo_flag->is_no_flag) 
+                    mx_printstr("\n");
             }
         } else {
             mx_printerr("Odd number of quotes.\n");
@@ -138,6 +191,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
             return 1;
         }
     } else {
+        printf("ptr %s\n", ptr);
         bool isWrite = true;
         char *str = NULL;
         str = mx_strnew(PATH_MAX);
@@ -199,7 +253,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
 //             } else if (*(slash_ptr + 1) == '\\') {
 //                 *slash_ptr = '\\';
 //             } else if (*(slash_ptr + 1) == 'a') {
-//                 *slash_ptr = '\a';
+//                 *(slash_ptr + 1) = '\a';
 //             } else if (*(slash_ptr + 1) == 'v') {
 //                 *slash_ptr = '\v';
 //             } else if (*(slash_ptr + 1) == 'b') {
@@ -241,7 +295,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
 //             } else if (*(slash_ptr + 1) == '\\') {
 //                 *slash_ptr = '\\';
 //             } else if (*(slash_ptr + 1) == 'a') {
-//                 *slash_ptr = '\a';
+//                 *(slash_ptr + 1) = '\a';
 //             } else if (*(slash_ptr + 1) == 'v') {
 //                 *slash_ptr = '\v';
 //             } else if (*(slash_ptr + 1) == 'b') {
@@ -281,6 +335,7 @@ t_echo_flags *create_echo_flags(void) {
     echo_flag->is_n_flag = false;
     echo_flag->is_e_flag = false;
     echo_flag->is_E_flag = false;
+    echo_flag->is_no_flag = false;
     return echo_flag;
 }
 
@@ -297,7 +352,8 @@ int find_echo_flags(t_echo_flags *echo_flags, char **args) {
                     echo_flags->is_E_flag = true;
                     echo_flags->is_e_flag = false;
                 } else {
-                    return 1;
+                    echo_flags->is_no_flag = true;
+                    return 0;
                 }
             }
         }

@@ -8,6 +8,7 @@ typedef struct s_echo_flags
     bool is_n_flag;
     bool is_e_flag;
     bool is_E_flag;
+    bool is_no_flag;
 }              t_echo_flags;
 
 int clear_echo(t_echo_flags *echo_flag, char **args);

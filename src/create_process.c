@@ -1,4 +1,5 @@
 #include "ush.h"
+#include "utils.h"
 
 void remove_double_quotes_from_parameters(char **parameters) {
     for (int parameter_index = 0; parameters[parameter_index] != NULL; parameter_index++) {
@@ -23,6 +24,7 @@ void create_process(char *command, char **parameters, char *line) {
     if (child_process_id == 0) {
         if (getenv("PATH") == NULL) {
             mx_printerr("ush: command not found: ");
+            delete_back_slashes(command);
             mx_printerr(command);
             mx_printerr("\n");
             exit(1);
@@ -47,6 +49,7 @@ void create_process(char *command, char **parameters, char *line) {
         }
 
         mx_printerr("ush: command not found: ");
+        delete_back_slashes(command);
         mx_printerr(command);
         mx_printerr("\n");
         mx_del_strarr(&dir_paths);

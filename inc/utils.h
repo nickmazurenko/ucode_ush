@@ -13,5 +13,6 @@ char mx_char_to_upper(char symbol);
 int mx_get_substr_index_new(char *str, const char *sub_str);
 int mx_atoi(char *);
 char *mx_strjoin_nleak(char const *s1, char const *s2);
-
+void delete_back_slash(char *str, int back_slash_idx);
+void delete_back_slashes(char *str);
 #endif //UTILS_H

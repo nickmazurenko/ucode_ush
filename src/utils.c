@@ -107,3 +107,17 @@ char *mx_strjoin_nleak(char const *s1, char const *s2) {
     mx_strdel(&free);
     return result;
 }
+
+void delete_back_slash(char *str, int back_slash_idx) {
+    if(back_slash_idx != -1) {
+            mx_memmove(&str[back_slash_idx], &str[back_slash_idx + 1], mx_strlen(str) - back_slash_idx);
+    }
+}
+
+void delete_back_slashes(char *str) {
+
+    int back_slash_idx = 0; 
+    while ((back_slash_idx = mx_get_char_index(str, '\\')) != -1) {
+        delete_back_slash(str, back_slash_idx);
+    }
+}

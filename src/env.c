@@ -1,5 +1,6 @@
 #include "ush.h"
 #include "env.h"
+#include "utils.h"
 
 t_env_flags *create_env_flags(void);
 void print_env_error(char wrong_flag);
@@ -182,6 +183,7 @@ void print_env_error(char wrong_flag) {
 
 void wrong_command_error(char *command) {
     mx_printerr("ush: command not found: ");
+    // delete_back_slashes(command);
     mx_printerr(command);
     mx_printerr("\n");
 }

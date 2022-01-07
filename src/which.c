@@ -27,7 +27,7 @@ int clear_which(t_which_flags *which_flag, char **args) {
             for (int command_idx = 0; command_idx < 8; command_idx++) {
                 if (!mx_strcmp(commands[command_idx], args[args_idx])) {
                     mx_printerr(args[args_idx]);
-                    mx_printerr(": ush built-in command\n");
+                    mx_printerr(": shell built-in command\n");
                     is_present = true;
                     break;
                 }
@@ -97,7 +97,7 @@ int clear_which(t_which_flags *which_flag, char **args) {
             for (int command_idx = 0; command_idx < 8; command_idx++) {
                 if (!mx_strcmp(commands[command_idx], args[args_idx])) {
                     mx_printerr(args[args_idx]);
-                    mx_printerr(": ush built-in command\n");
+                    mx_printerr(": shell built-in command\n");
                     is_present = true;
                     built = 1;
                     args_idx++;

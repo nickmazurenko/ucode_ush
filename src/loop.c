@@ -9,7 +9,6 @@ int execute_commands(char** commands_arr) {
 
         if (mx_command_substitution(&commands_arr[i]) == -1) // TODO: как работает замена?
             continue;
-
         parameters = mx_strsplit(commands_arr[i], ' ');
         command = mx_strdup(parameters[0]);
 
