@@ -43,10 +43,13 @@ int clear_pwd(t_pwd_flags *flags) {
 
 
 void print_pwd_error(char wrong_flag) {
+    char *err = mx_strnew(1);
+    err[0] = wrong_flag;
     mx_printerr("ush: pwd: -");
-    mx_printerr(&wrong_flag);
+    mx_printerr(err);
     mx_printerr(": invalid option\n");
     mx_printerr("pwd: usage: pwd [-LP]\n");
+    free(err);
 }
 
 int find_pwd_flags(t_pwd_flags *pwd_flag, char **args) {

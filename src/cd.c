@@ -255,10 +255,13 @@ t_cd_flags *create_cd_flags(void) {
 }
 
 void print_cd_error(char wrong_flag) {
+    char *err = mx_strnew(1);
+    err[0] = wrong_flag;
     mx_printerr("ush: cd: -");
-    mx_printerr(&wrong_flag);
+    mx_printerr(err);
     mx_printerr(": invalid option\n");
     mx_printerr("cd: usage: cd [-sP]\n");
+    free(err);
 }
 
 int find_cd_flags(t_cd_flags *data, char **args) {

@@ -187,9 +187,12 @@ t_which_flags *create_which_flags(void) {
 }
 
 void print_which_error(char wrong_flag) {
+    char *err = mx_strnew(1);
+    err[0] = wrong_flag;
     mx_printerr("which: bad option: -");
-    mx_printerr(&wrong_flag);
+    mx_printerr(err);
     mx_printerr("\n");
+    free(err);
 }
 
 int find_which_flags(t_which_flags *which_flag, char **args) {

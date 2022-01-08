@@ -7,7 +7,8 @@ static void del_extra_spaces(char **str);
 t_echo_flags *create_echo_flags(void);
 int find_echo_flags(t_echo_flags *echo_flags, char **args);
 
-static char *replace_back_slash(char *str, t_echo_flags *echo_flag) {
+static char *
+replace_back_slash(char *str, t_echo_flags *echo_flag) {
     char *res = (char *)malloc(mx_strlen(str) + 1);
     int len = 0;
 
@@ -34,6 +35,7 @@ static char *replace_back_slash(char *str, t_echo_flags *echo_flag) {
 }
 
 void process_echo_args(char **args, int idx, t_echo_flags *echo_flag) {
+    
     char *tmp = replace_back_slash(args[idx], echo_flag);
     
     char *sequenses[] = {"\\a","\\b","\\f","\\n","\\r","\\t","\\v", NULL};
@@ -42,15 +44,17 @@ void process_echo_args(char **args, int idx, t_echo_flags *echo_flag) {
     free(args[idx]);
     args[idx] = mx_strdup(tmp);
     free(tmp);
-    for (int j = 0; sequenses[j] != NULL; j++) {
-        if (strstr(args[idx],sequenses[j])) {
-            tmp = mx_replace_substr_new(args[idx],sequenses[j], escape[j]);
-            // printf("\ntmp %s\n", tmp);
-            free(args[idx]);
-            args[idx] = mx_strdup(tmp);
-            free(tmp);
+
+        for (int j = 0; sequenses[j] != NULL; j++) {
+            if (strstr(args[idx],sequenses[j])) {
+                
+                tmp = replace_substr_new(args[idx],sequenses[j], escape[j]);
+                
+                // free(args[idx]);
+                args[idx] = mx_strdup(tmp);
+                free(tmp);
+            }
         }
-    }
 }
 
 
@@ -59,9 +63,14 @@ void process_echo_args(char **args, int idx, t_echo_flags *echo_flag) {
 int clear_echo(t_echo_flags *echo_flag, char **args) {
     del_extra_spaces(args);
     *args = mx_strtrim(*args);
-    if (!echo_flag->is_E_flag && strstr(args[0], "\\") && mx_get_char_index(args[0], '\"') != -1) 
+    if (!echo_flag->is_E_flag && strstr(args[0], "\\") && mx_get_char_index(args[0], '\"') != -1)  {
         process_echo_args(args, 0, echo_flag);
-    
+    } else if (!echo_flag->is_E_flag && strstr(args[0], "\\\\")) {
+        delete_back_slashes(args[0]);
+        process_echo_args(args, 0, echo_flag);
+    }
+
+
     if (echo_flag->is_E_flag)
         args[0] = replace_back_slash(args[0], echo_flag);
     // TODO check if macos works the same
@@ -121,6 +130,8 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         }
         int count = 0;
         bool is_par = false;
+        printf("str: %s\n", str);
+        fflush(stdout);
         for (int str_idx = 0; str[str_idx]; str_idx++) {
             if (str[str_idx] == '"' || str[str_idx] == '\'') {
                 for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {
@@ -136,6 +147,7 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
                 }
             }
         }
+        
         if(count % 2 == 0 || count == 0) {
             if(isWrite) {
                 mx_printstr(str);
