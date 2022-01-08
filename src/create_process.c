@@ -5,8 +5,8 @@ void remove_double_quotes_from_parameters(char **parameters) {
 
     for (int parameter_index = 0; parameters[parameter_index] != NULL; parameter_index++) {
         int double_quotes_number = mx_count_substr_new(parameters[parameter_index], "\"");
-        
-        if (double_quotes_number % 2 != 0) continue;
+        int screenable_double_quotes_number = mx_count_substr_new(parameters[parameter_index], "\\\"");
+        if ((double_quotes_number - screenable_double_quotes_number) == 0) continue;
 
         int double_quot_index = -1;
         while ((double_quot_index = mx_get_char_index(parameters[parameter_index], '"')) != -1)
@@ -24,7 +24,9 @@ void create_process(char *command, char **parameters, char *line) {
     //     mx_printstr(parameters[i]);
     //     mx_printchar('\n');
     // }
-    remove_double_quotes_from_parameters(parameters + 1);
+    if (strstr(command, "echo")) {
+        remove_double_quotes_from_parameters(parameters + 1);
+    }
     // TODO remove double quotes from command
     int child_process_id = fork();
     if (child_process_id == 0) {

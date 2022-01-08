@@ -281,12 +281,12 @@ int handle_dollars(char* data, char** str) {
         char *replace_value_ptr = replace_value;
         while (fgets(replace_value_ptr, PATH_MAX, fp) != NULL) {
             replace_value_ptr = replace_value + mx_strlen(replace_value);
-            replace_value[mx_strlen(replace_value) - 1] = ' ';
+            replace_value[mx_strlen(replace_value)] = ' ';
         }
         replace_value[mx_strlen(replace_value) - 1] = '\0';
         pclose(fp);
 
-        *str = replace_substr_new(*str, replaced_str, replace_value);
+        *str = mx_replace_substr_new(*str, replaced_str, replace_value);
         free(replace_value);
         free(command);
         free(income_command);

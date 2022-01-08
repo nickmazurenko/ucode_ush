@@ -73,6 +73,14 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
 
     if (echo_flag->is_E_flag)
         args[0] = replace_back_slash(args[0], echo_flag);
+    else {
+        int screenable_double_quotes_number = mx_count_substr_new(args[0], "\\\"");
+        int double_quotes_number = mx_count_substr_new(args[0], "\"");
+        if ( (double_quotes_number - screenable_double_quotes_number) != 0 )
+        {
+            screen_back_slashes(&(args[0]));
+        }
+    }
     // TODO check if macos works the same
     char **data = mx_strsplit(*args, '>');
     char *ptr = data[0];
@@ -130,8 +138,6 @@ int clear_echo(t_echo_flags *echo_flag, char **args) {
         }
         int count = 0;
         bool is_par = false;
-        printf("str: %s\n", str);
-        fflush(stdout);
         for (int str_idx = 0; str[str_idx]; str_idx++) {
             if (str[str_idx] == '"' || str[str_idx] == '\'') {
                 for (int tmp_idx = str_idx; str[tmp_idx]; tmp_idx++) {

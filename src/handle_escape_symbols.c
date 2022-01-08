@@ -18,7 +18,6 @@ void handle_escape_symbols(char ***arr) {
                 data[j + 1] = tmp;
             }
             i--;
-            mx_printerr("there\n");
         }
     }
     for (int i = 0; data[i] != NULL; i++) {
