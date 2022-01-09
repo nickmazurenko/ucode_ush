@@ -1,5 +1,17 @@
 #include "loop.h"
 #include "utils.h"
+#include "args_parser.h"
+
+char **str_array_to_null_end(char** array, int array_size) {
+    char** null_end_array = (char**)malloc(sizeof(char*) * (array_size + 1));
+    for (int array_index = 0; array_index < array_size; array_index++) {
+        null_end_array[array_index] = mx_strdup(array[array_index]);
+        if (array[array_index] != NULL) free(array[array_index]);
+    }
+    null_end_array[array_size] = NULL;
+    free(array);
+    return null_end_array;
+}
 
 int execute_commands(char** commands_arr) {
 
@@ -12,7 +24,10 @@ int execute_commands(char** commands_arr) {
     for (int i = 0; commands_arr[i] != NULL; ++i) {
         if (mx_command_substitution(&commands_arr[i]) == -1) // TODO: как работает замена?
             continue;
-        parameters = mx_strsplit(commands_arr[i], ' ');
+        // parameters = mx_strsplit(commands_arr[i], ' ');
+        int argc = 0;
+        char**buff = parse_input_to_args(commands_arr[i], &argc);
+        parameters = str_array_to_null_end(buff, argc);
 
         for (int parameter_index = 0; parameters[parameter_index] != NULL; parameter_index++) {
             delete_one_streak_back_slash(&parameters[parameter_index]);
