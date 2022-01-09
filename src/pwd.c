@@ -28,7 +28,12 @@ int clear_pwd(t_pwd_flags *flags) {
         if(res == NULL) {
             char* buff = mx_strnew(PATH_MAX);
             readlink(getenv("PWD"), buff, PATH_MAX);
-            res = mx_strndup(getenv("PWD"), 1 + get_last_char_index(getenv("PWD"), '/'));
+//            printf("buff %s\n", buff);
+            if(buff[0] == '\0') {
+                free(buff);
+                buff = mx_strdup(t_dirs_to_work.PWD);
+            } else
+                res = mx_strndup(getenv("PWD"), 1 + get_last_char_index(getenv("PWD"), '/'));
             res = mx_strjoin_nleak(res, buff);
             free(buff);
         }

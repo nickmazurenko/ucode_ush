@@ -1,5 +1,5 @@
 NAME = ush
-CFLAGS = -std=c11 $(addprefix -W, all extra error pedantic) -g
+CFLAGS = -std=c11 #$(addprefix -W, all extra error pedantic) -g
 # CFLAGS = -std=c11 -g
 COMP = clang
 

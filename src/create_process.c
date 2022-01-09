@@ -13,7 +13,6 @@ void remove_double_quotes_from_parameters(char **parameters) {
         {
             char *buff = parameters[parameter_index];
             parameters[parameter_index] = replace_substr_new(buff, "\"", "");
-            // mx_printerr("there\n");
             // free(buff);
         }
     }
