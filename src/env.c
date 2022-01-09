@@ -52,16 +52,24 @@ int clear_env(t_env_flags *env_flag, char **args) {
                     exit(1);                    
                 }
                 exit(0);
-            } else {
-                t_jobs *new_command = jobs_new_node(pid, args[3]);
-                jobs_push_back(&jobs, &new_command);
-                int status = 0;
-                waitpid(pid, &status, WUNTRACED);
+            } else { 
+
+                int args_len = 0;
+                for (; args[args_len] != NULL; args_len++){}
+                if (args_len > 3 || args_len == 3) {
+                    
+                    t_jobs *new_command = jobs_new_node(pid, args[3]);
+                    jobs_push_back(&jobs, &new_command);
+                    int status = 0;
+                    waitpid(pid, &status, WUNTRACED);
+                    
+                    t_dirs_to_work.exit_status = WEXITSTATUS(status);
+                    if (!WIFSTOPPED(status)) {
+                        jobs_remove(&jobs, pid);
+                    } 
+
+                }
                 
-                t_dirs_to_work.exit_status = WEXITSTATUS(status);
-                if (!WIFSTOPPED(status)) {
-                    jobs_remove(&jobs, pid);
-                } 
                 // else {
                 //     t_dirs_to_work.exit_status = 147;
                 // }

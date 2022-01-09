@@ -145,9 +145,8 @@ int handle_dollars(char* data, char** str) {
                 variable_value = mx_strdup("\0");
             else
                 variable_value = mx_strdup(get_env_value);
-
             if (mx_isalpha(variable_name[0]))
-                *str = replace_substr_new(*str, replaced_str, variable_value);
+                *str = mx_replace_substr_new(*str, replaced_str, variable_value);
 
             free(variable_value);
             free(replaced_str);

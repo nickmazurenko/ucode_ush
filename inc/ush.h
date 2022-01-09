@@ -1,7 +1,7 @@
 #ifndef USH_H
 #define USH_H
 #define _GNU_SOURCE
-#define _SVID_SOURCE
+// #define _SVID_SOURCE
 #define _POSIX_C_SOURCE 200809L //for setenv() and unsetenv()
 #define _XOPEN_SOURCE 500 // for realpath() on Linux
 #include <sys/wait.h>
