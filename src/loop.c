@@ -4,11 +4,19 @@
 
 char **str_array_to_null_end(char** array, int array_size) {
     char** null_end_array = (char**)malloc(sizeof(char*) * (array_size + 1));
+    int shift = 0;
     for (int array_index = 0; array_index < array_size; array_index++) {
-        null_end_array[array_index] = mx_strdup(array[array_index]);
+
+        char* trimmed = mx_strtrim(array[array_index]);
+
+        if (trimmed == NULL || trimmed[0] == '\0') {
+            shift++;
+        } else
+             null_end_array[array_index - shift] = mx_strdup(trimmed);
         if (array[array_index] != NULL) free(array[array_index]);
+        free(trimmed);
     }
-    null_end_array[array_size] = NULL;
+    null_end_array[array_size - shift] = NULL;
     free(array);
     return null_end_array;
 }

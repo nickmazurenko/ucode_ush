@@ -26,10 +26,13 @@ int clear_pwd(t_pwd_flags *flags) {
     else {
         getcwd(res, INT_MAX);
         if(res == NULL) {
-            char* buff = mx_strnew(PATH_MAX);
-            readlink(getenv("PWD"), buff, PATH_MAX);
-            res = mx_strndup(getenv("PWD"), 1 + get_last_char_index(getenv("PWD"), '/'));
-            res = mx_strjoin_nleak(res, buff);
+            char* buff = NULL;
+            // readlink(getenv("PWD"), buff, PATH_MAX);
+            buff = realpath(getenv("PWD"), NULL);
+            if (buff != NULL && buff[0] == '\0')
+                res = mx_strndup(getenv("PWD"), 1 + get_last_char_index(getenv("PWD"), '/'));
+            else
+                res = mx_strjoin(res, buff);
             free(buff);
         }
     }
