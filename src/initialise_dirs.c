@@ -3,7 +3,9 @@
 
 void initialise_dirs(void) {
     t_dirs_to_work.PWD = mx_strnew(PATH_MAX);
-    t_dirs_to_work.PWD = mx_strcpy(t_dirs_to_work.PWD, getenv("PWD"));
+    // t_dirs_to_work.PWD = mx_strcpy(t_dirs_to_work.PWD, getenv("PWD"));
+    getcwd(t_dirs_to_work.PWD, PATH_MAX);
+    setenv("PWD", t_dirs_to_work.PWD, 1);
 
     t_dirs_to_work.OLDPWD = mx_strnew(PATH_MAX);
     char *system_var = getenv("OLDPWD");
