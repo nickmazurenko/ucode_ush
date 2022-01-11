@@ -151,9 +151,10 @@ int clear_which(t_which_flags *which_flag, char **args) {
                             mx_strcpy(name, path_to_dir[path_idx]);
                             name = mx_strcat(name, "/");
                             name = mx_strcat(name, args[args_idx]);
-                            if(!which_flag->is_s_flag)
+                            if(!which_flag->is_s_flag){
                                 mx_printstr(name);
-                            mx_printchar('\n');
+                                mx_printchar('\n');
+                            }
                             free(name);
                             is_present = true;
                             break;
