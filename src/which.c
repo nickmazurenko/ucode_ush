@@ -96,10 +96,10 @@ int clear_which(t_which_flags *which_flag, char **args) {
             int built = 0;
             for (int command_idx = 0; command_idx < 8; command_idx++) {
                 if (!mx_strcmp(commands[command_idx], args[args_idx])) {
-                    if(!which_flag->is_s_flag) {
+                    // if(!which_flag->is_s_flag) {
                         mx_printerr(args[args_idx]);
                         mx_printerr(": shell built-in command\n");
-                    }
+                    // }
                     is_present = true;
                     built = 1;
                     args_idx++;
@@ -132,10 +132,10 @@ int clear_which(t_which_flags *which_flag, char **args) {
                     is_present = true;
                     continue;
                 } else {
-                    if(!which_flag->is_s_flag) {
+                    // if(!which_flag->is_s_flag) {
                         mx_printerr(args[args_idx]);
                         mx_printerr(" not found\n");
-                    }
+                    // }
                     args_idx++;
                     is_present = true;
                     is_here = false;
@@ -166,10 +166,10 @@ int clear_which(t_which_flags *which_flag, char **args) {
 
             if (is_present == false) {
                 is_here = false;
-                if(!which_flag->is_s_flag) {
+                // if(!which_flag->is_s_flag) {
                     mx_printerr(args[args_idx]);
                     mx_printerr(" not found\n");
-                }
+                // }
             }
             is_present = false;
             args_idx++;
