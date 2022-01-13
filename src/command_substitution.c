@@ -282,7 +282,7 @@ int handle_dollars(char* data, char** str) {
             replace_value_ptr = replace_value + mx_strlen(replace_value);
             replace_value[mx_strlen(replace_value)] = ' ';
         }
-        replace_value[mx_strlen(replace_value) - 1] = '\0';
+        replace_value[mx_strlen(replace_value) - 2] = '\0';
         pclose(fp);
 
         *str = mx_replace_substr_new(*str, replaced_str, replace_value);
